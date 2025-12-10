@@ -3,40 +3,40 @@
  * Initializes and starts the application
  */
 
-import 'reflect-metadata';
-import { config } from 'dotenv';
-import { createServer } from './presentation/server.js';
-import { logger } from './shared/utils/logger.util.js';
-import { DatabaseConnection } from './infrastructure/database/mysql/connection.js';
+import "reflect-metadata";
+import { config } from "dotenv";
+import { createServer } from "./presentation/server.js";
+import { logger } from "./shared/utils/logger.util.js";
+import { DatabaseConnection } from "./infrastructure/database/mysql/connection.js";
 
 // Load environment variables
 config();
 
 // Application configuration
-const PORT = parseInt(process.env.PORT || '3000', 10);
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const PORT = parseInt(process.env.PORT || "3000", 10);
+const NODE_ENV = process.env.NODE_ENV || "development";
 
 /**
  * Bootstrap application
  */
 async function bootstrap(): Promise<void> {
   try {
-    logger.info('Starting application...', {
+    logger.info("Starting application...", {
       environment: NODE_ENV,
       port: PORT,
     });
 
     // Initialize database connection
-    logger.info('Connecting to database...');
+    logger.info("Connecting to database...");
     const db = DatabaseConnection.getInstance();
     await db.testConnection();
-    logger.info('Database connected successfully');
+    logger.info("Database connected successfully");
 
     // Create and start server
     const server = createServer(PORT);
     await server.start();
 
-    logger.info('Application started successfully', {
+    logger.info("Application started successfully", {
       port: PORT,
       environment: NODE_ENV,
     });
@@ -44,7 +44,7 @@ async function bootstrap(): Promise<void> {
     // Graceful shutdown handlers
     setupGracefulShutdown(server);
   } catch (error) {
-    logger.error('Failed to start application', { error });
+    logger.error("Failed to start application", { error });
     process.exit(1);
   }
 }
@@ -64,27 +64,27 @@ function setupGracefulShutdown(server: ReturnType<typeof createServer>): void {
       const db = DatabaseConnection.getInstance();
       await db.close();
 
-      logger.info('Graceful shutdown completed');
+      logger.info("Graceful shutdown completed");
       process.exit(0);
     } catch (error) {
-      logger.error('Error during shutdown', { error });
+      logger.error("Error during shutdown", { error });
       process.exit(1);
     }
   };
 
   // Handle termination signals
-  process.on('SIGTERM', () => shutdown('SIGTERM'));
-  process.on('SIGINT', () => shutdown('SIGINT'));
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
 
   // Handle uncaught errors
-  process.on('uncaughtException', (error) => {
-    logger.error('Uncaught exception', { error });
-    shutdown('UNCAUGHT_EXCEPTION');
+  process.on("uncaughtException", (error) => {
+    logger.error("Uncaught exception", { error });
+    shutdown("UNCAUGHT_EXCEPTION");
   });
 
-  process.on('unhandledRejection', (reason, promise) => {
-    logger.error('Unhandled rejection', { reason, promise });
-    shutdown('UNHANDLED_REJECTION');
+  process.on("unhandledRejection", (reason, promise) => {
+    logger.error("Unhandled rejection", { reason, promise });
+    shutdown("UNHANDLED_REJECTION");
   });
 }
 

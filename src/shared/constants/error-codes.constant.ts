@@ -28,6 +28,7 @@ export enum ErrorCode {
   LINK_NOT_FOUND = 'LINK_NOT_FOUND',
   CASE_NOT_FOUND = 'CASE_NOT_FOUND',
   MESSAGE_NOT_FOUND = 'MESSAGE_NOT_FOUND',
+  SERVICE_NOT_FOUND = 'SERVICE_NOT_FOUND',
 
   // Conflict Errors (409)
   CONFLICT = 'CONFLICT',
@@ -92,6 +93,7 @@ export const ERROR_CODE_TO_HTTP_STATUS: Record<ErrorCode, number> = {
   [ErrorCode.LINK_NOT_FOUND]: 404,
   [ErrorCode.CASE_NOT_FOUND]: 404,
   [ErrorCode.MESSAGE_NOT_FOUND]: 404,
+  [ErrorCode.SERVICE_NOT_FOUND]: 404,
 
   // 409 - Conflict
   [ErrorCode.CONFLICT]: 409,

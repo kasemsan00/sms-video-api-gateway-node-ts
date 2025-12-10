@@ -310,16 +310,10 @@ src/
 │   │   │       ├── mysql-case.repository.ts
 │   │   │       └── mysql-service.repository.ts
 │   │   │
-│   │   ├── seeds/
-│   │   │   ├── index.ts                  # Seed orchestrator
-│   │   │   ├── color-scheme.seed.ts
-│   │   │   └── services.seed.ts
-│   │   │
-│   │   └── migrations/
-│   │       ├── index.ts                  # Migration runner
-│   │       ├── 001-initial-schema.migration.ts
-│   │       ├── 002-add-notification-table.migration.ts
-│   │       └── 003-add-indexes.migration.ts
+│   │   └── seeds/
+│   │       ├── index.ts                  # Seed orchestrator
+│   │       ├── color-scheme.seed.ts
+│   │       └── services.seed.ts
 │   │
 │   ├── external/
 │   │   ├── livekit/
@@ -2500,6 +2494,12 @@ describe('Room Lifecycle E2E', () => {
 ## 11. Database Schema Reference
 
 โครงสร้างฐานข้อมูลจริงจากไฟล์ `init.sql` (MySQL 9.4.0)
+
+> ⚠️ **หมายเหตุสำคัญ:**
+> - ไฟล์ `init.sql` ใช้เป็น **Reference สำหรับสร้าง Models และ Types** เท่านั้น
+> - **ไม่ต้องเขียน Migration** - การเปลี่ยนแปลงฐานข้อมูลจะจัดการแยกต่างหาก
+> - **ไม่ต้องเขียน CRUD SQL** (CREATE, DELETE, UPDATE) ในโปรเจคนี้ - ใช้ Repository Pattern สำหรับ Read operations เป็นหลัก
+> - เมื่อมีการเปลี่ยนแปลง schema จะอัพเดท `init.sql` โดยตรง
 
 ### 11.1 Database Overview
 

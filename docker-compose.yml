@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+  sms-rama-backend:
+    build: .
+    container_name: sms-rama-backend
+    env_file:
+      - .env.production
+    restart: always
+    ports:
+      - "5500:5500"
+    volumes:
+      - ./logs:/logs
+      - ./uploads:/uploads
+    networks:
+      - local-docker
+networks:
+  local-docker:
+    external: true

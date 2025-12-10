@@ -1,0 +1,54 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "overrides": [
+    {
+      "files": ["client/**/*.js"],
+      "parser": "@babel/eslint-parser",
+      "parserOptions": {
+        "requireConfigFile": false,
+        "ecmaFeatures": {
+          "jsx": true
+        },
+        "babelOptions": {
+          "presets": ["@babel/preset-react"]
+        }
+      },
+      "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+      "plugins": ["jsx"]
+    }
+  ],
+  "plugins": ["prettier"],
+  "rules": {
+    "block-scoped-var": ["error"],
+    "callback-return": ["error", ["done", "proceed", "next", "onwards", "callback", "cb"]],
+    "comma-style": ["warn", "last"],
+    "eqeqeq": ["error", "always"],
+    "eol-last": ["warn"],
+    "handle-callback-err": ["error"],
+    "no-dupe-keys": ["error"],
+    "no-duplicate-case": ["error"],
+    "no-extra-semi": ["warn"],
+    "no-labels": ["error"],
+    "no-redeclare": ["warn"],
+    "no-return-assign": ["error", "always"],
+    "no-sequences": ["error"],
+    "no-trailing-spaces": ["warn"],
+    "no-undef": ["off"],
+    "no-unexpected-multiline": ["warn"],
+    "no-unreachable": ["warn"],
+    "no-unused-vars": "off",
+    "no-use-before-define": ["error", { "functions": false }],
+    "one-var": ["off", "never"],
+    "prefer-arrow-callback": ["warn", { "allowNamedFunctions": true }],
+    "semi": ["warn", "always"],
+    "semi-spacing": ["warn", { "before": false, "after": true }],
+    "semi-style": ["warn", "last"]
+  }
+}

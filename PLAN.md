@@ -21,6 +21,7 @@
 8. [Testing Strategy](#8-testing-strategy)
 9. [Dependencies](#9-dependencies)
 10. [Checklist](#10-checklist)
+11. [Database Schema Reference](#11-database-schema-reference)
 
 ---
 
@@ -2486,6 +2487,478 @@ describe('Room Lifecycle E2E', () => {
 - [ ] Documentation
 - [ ] Deploy to staging
 - [ ] Deploy to production
+
+---
+
+## 11. Database Schema Reference
+
+โครงสร้างฐานข้อมูลจริงจากไฟล์ `init.sql` (MySQL 9.4.0)
+
+### 11.1 Database Overview
+
+```
+Database: conference
+Charset: utf8mb4
+Collation: utf8mb4_unicode_ci
+```
+
+### 11.2 Tables Summary
+
+| Table Name | Description | Primary Key | Key Relationships |
+|------------|-------------|-------------|-------------------|
+| `room_conference` | ห้องประชุมหลัก | `id` (auto increment) | FK → `node_livekit.id` |
+| `room_user` | ผู้ใช้ในห้อง | `id` (auto increment) | — |
+| `link_connect` | ลิงก์สำหรับเชื่อมต่อ | `id` (auto increment) | FK → `room_user.id` |
+| `chat_message` | ข้อความแชท | `id` (auto increment) | — |
+| `case_data` | ข้อมูลเคส | `id` (auto increment) | — |
+| `car_track` | ติดตามรถ | `id` (auto increment) | — |
+| `record_media` | บันทึกวิดีโอ | `id` (auto increment) | — |
+| `files` | ไฟล์แนบ | `id` (auto increment) | — |
+| `services` | การตั้งค่าบริการ | `id` (auto increment) | — |
+| `color_scheme` | สี | `id` (auto increment) | — |
+| `node_livekit` | LiveKit Server Nodes | `id` (auto increment) | — |
+| `notification` | การแจ้งเตือน | `notificationId` (auto increment) | — |
+| `usage_status_log` | ล็อกสถานะการใช้งาน | `id` (auto increment) | — |
+| `data_log` | ล็อกข้อมูลทั่วไป | `id` (auto increment) | — |
+| `radio_devices` | อุปกรณ์วิทยุ | `id` (auto increment) | — |
+| `radio_locations` | ตำแหน่งวิทยุ | `id` (auto increment) | — |
+
+### 11.3 Core Tables Schema
+
+#### 11.3.1 `room_conference` - ห้องประชุม (Aggregate Root)
+
+```sql
+CREATE TABLE IF NOT EXISTS `room_conference` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `nodeLivekitId` int DEFAULT NULL,
+  `status` varchar(10) DEFAULT NULL,            -- 'open' | 'close'
+  `roomType` varchar(10) DEFAULT NULL,          -- 'conference' | 'location'
+  `room` varchar(50) DEFAULT NULL,               -- Room name/ID
+  `service` int DEFAULT NULL,                    -- FK to services
+  `recordStatus` int DEFAULT '0',                -- Recording status
+  `recordId` varchar(50) DEFAULT NULL,
+  `autoRecord` int DEFAULT '0',
+  `recordType` varchar(50) DEFAULT NULL,
+  `encodingOptionsPreset` varchar(50) DEFAULT NULL,
+  `chatEnabled` int DEFAULT '0',
+  `messageUnread` int DEFAULT '0',
+  `agentSeen` datetime DEFAULT NULL,
+  `userAgent` tinytext,
+  `webSocketURL` tinytext,
+  `dtmCreated` datetime DEFAULT NULL,
+  `dtmUpdated` datetime DEFAULT NULL,
+  `dtmClosed` datetime DEFAULT NULL,
+  `dtmExpired` datetime DEFAULT NULL,
+  `dtmRoomStarted` datetime DEFAULT NULL,
+  `dtmRoomFinished` datetime DEFAULT NULL,
+  `dtmStartRecord` datetime DEFAULT NULL,
+  `dtmStopRecord` datetime DEFAULT NULL,
+  `sync_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_room_conference_status_dtmexpired` (`status`,`dtmExpired`),
+  KEY `idx_room_conference_room` (`room`),
+  KEY `idx_room_conference_service` (`service`),
+  CONSTRAINT `FK_room_conference_node_livekit` FOREIGN KEY (`nodeLivekitId`) REFERENCES `node_livekit` (`id`)
+);
+```
+
+**Entity Mapping**: `Room` entity
+
+#### 11.3.2 `room_user` - ผู้ใช้ในห้อง
+
+```sql
+CREATE TABLE IF NOT EXISTS `room_user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `room` varchar(100) DEFAULT NULL,
+  `identity` varchar(50) DEFAULT NULL,
+  `color` varchar(50) DEFAULT NULL,
+  `userName` varchar(100) DEFAULT NULL,
+  `userType` varchar(50) DEFAULT NULL,          -- 'admin' | 'user' | 'viewer'
+  `status` varchar(11) DEFAULT NULL,
+  `socketId` varchar(50) DEFAULT NULL,
+  `conference` int DEFAULT '1',
+  `cameraMicrophoneStatus` varchar(100) DEFAULT NULL,
+  `camera` tinyint(1) DEFAULT '1',
+  `microphone` tinyint(1) DEFAULT '1',
+  `latitude` varchar(100) DEFAULT NULL,
+  `longitude` varchar(100) DEFAULT NULL,
+  `accuracy` varchar(100) DEFAULT NULL,
+  `userAgent` text,
+  `dtmcreated` datetime DEFAULT NULL,
+  `dtmupdated` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_room_user_identity` (`identity`),
+  KEY `idx_room_user_socketId` (`socketId`)
+);
+```
+
+**Entity Mapping**: `User` entity
+
+#### 11.3.3 `link_connect` - ลิงก์เชื่อมต่อ
+
+```sql
+CREATE TABLE IF NOT EXISTS `link_connect` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `roomUserId` int DEFAULT NULL,
+  `sms` int DEFAULT '1',
+  `recordId` int DEFAULT NULL,
+  `mobile` varchar(20) NOT NULL DEFAULT '',
+  `linkID` varchar(50) DEFAULT NULL,             -- 6-character link ID
+  `domainIndex` int DEFAULT '0',
+  `share` int DEFAULT '0',
+  `enabled` int DEFAULT '1',
+  `userName` varchar(100) DEFAULT NULL,
+  `room` varchar(50) DEFAULT NULL,
+  `userType` varchar(10) DEFAULT NULL,
+  `linkType` varchar(100) DEFAULT NULL,          -- 'video' | 'location'
+  `crmSender` varchar(100) DEFAULT NULL,
+  `accuracy` varchar(50) DEFAULT NULL,
+  `latitude` decimal(12,9) DEFAULT NULL,
+  `longitude` decimal(12,9) DEFAULT NULL,
+  `patientLatitude` decimal(12,9) unsigned DEFAULT NULL,
+  `patientLongitude` decimal(12,9) unsigned DEFAULT NULL,
+  `patientUpdated` datetime DEFAULT NULL,
+  `service` int DEFAULT NULL,
+  `errorVideo` text,
+  `errorLocation` text,
+  `os` text,
+  `userAgent` text,
+  `requireJoinPermission` int DEFAULT '0',
+  `requireUserName` int DEFAULT '0',
+  `requirePassword` int DEFAULT '0',
+  `oneTimeLink` int DEFAULT '0',
+  `password` tinytext,
+  `isAdmin` varchar(11) DEFAULT '0',
+  `dtmConnection` datetime DEFAULT NULL,
+  `dtmDisconnect` datetime DEFAULT NULL,
+  `dtmCreated` datetime DEFAULT NULL,
+  `dtmExpired` datetime DEFAULT NULL,
+  `sync_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_link_connect_expired_enabled` (`dtmExpired`,`enabled`),
+  KEY `idx_link_connect_room` (`room`),
+  KEY `idx_link_connect_linkID` (`linkID`),
+  CONSTRAINT `FK_link_connect_room_user` FOREIGN KEY (`roomUserId`) REFERENCES `room_user` (`id`)
+);
+```
+
+**Entity Mapping**: `Link` entity
+
+#### 11.3.4 `chat_message` - ข้อความแชท
+
+```sql
+CREATE TABLE IF NOT EXISTS `chat_message` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `room` tinytext,
+  `identity` varchar(100) DEFAULT NULL,
+  `chat_identity` varchar(100) DEFAULT NULL,
+  `userName` tinytext,
+  `text` text,
+  `color` varchar(100) DEFAULT NULL,
+  `files` text,                                  -- JSON array of file objects
+  `replyToMessageId` int DEFAULT NULL,
+  `replyToUserName` tinytext,
+  `replyToText` tinytext,
+  `dtmCreated` datetime DEFAULT NULL,
+  `userType` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+
+**Entity Mapping**: `Message` entity
+
+### 11.4 Supporting Tables Schema
+
+#### 11.4.1 `services` - การตั้งค่าบริการ
+
+```sql
+CREATE TABLE IF NOT EXISTS `services` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT NULL,
+  `webTitle` varchar(100) DEFAULT NULL,
+  `prefixHLSRecordVideoSMS` varchar(50) DEFAULT NULL,
+  `prefixTextVideoSMS` varchar(50) DEFAULT NULL,
+  `prefixTextLocationSMS` varchar(50) DEFAULT NULL,
+  `domainsVideo` text,                           -- JSON array
+  `domainsLocation` text,                        -- JSON array
+  `smsSenderName` text,
+  `logo` varchar(200) DEFAULT NULL,
+  `titleColor` varchar(100) DEFAULT NULL,
+  `latitude` decimal(12,9) DEFAULT NULL,
+  `longitude` decimal(12,9) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+
+**Entity Mapping**: `Service` entity
+
+#### 11.4.2 `case_data` - ข้อมูลเคส
+
+```sql
+CREATE TABLE IF NOT EXISTS `case_data` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `caseId` int NOT NULL,
+  `service` int DEFAULT NULL,
+  `roomId` int DEFAULT NULL,
+  `operationNumber` varchar(100) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `hn` varchar(50) DEFAULT NULL,
+  `patientMobile` varchar(20) DEFAULT NULL,
+  `mobileCreated` varchar(50) DEFAULT NULL,
+  `caseType` varchar(50) DEFAULT NULL,
+  `userName` varchar(100) DEFAULT NULL,
+  `dtmCreated` datetime DEFAULT NULL,
+  `organization` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+
+**Entity Mapping**: `Case` entity
+
+#### 11.4.3 `record_media` - บันทึกวิดีโอ
+
+```sql
+CREATE TABLE IF NOT EXISTS `record_media` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `egressId` varchar(50) DEFAULT NULL,
+  `room` varchar(50) DEFAULT NULL,
+  `fileName` varchar(255) DEFAULT NULL,
+  `filePath` varchar(500) DEFAULT NULL,
+  `fileSize` int DEFAULT NULL,
+  `duration` int DEFAULT NULL,
+  `recordType` varchar(50) DEFAULT NULL,
+  `status` varchar(20) DEFAULT 'completed',
+  `dtmCreated` datetime DEFAULT NULL,
+  `dtmCompleted` datetime DEFAULT NULL,
+  `hls` varchar(100) DEFAULT NULL,
+  `encode` int DEFAULT NULL,                     -- 0=EncodeRo, 1=EncodeComplete, 2=EncodeFailed, 3=PackFile
+  `uploader` varchar(100) DEFAULT NULL,
+  `startRecord` datetime DEFAULT NULL,
+  `endRecord` datetime DEFAULT NULL,
+  `dtmUpdated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+
+**Entity Mapping**: `RecordMedia` entity
+
+#### 11.4.4 `files` - ไฟล์แนบ
+
+```sql
+CREATE TABLE IF NOT EXISTS `files` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `linkId` text,
+  `elementId` varchar(50) DEFAULT NULL,
+  `filename` varchar(255) NOT NULL,
+  `url` varchar(512) NOT NULL,
+  `thumbnail` varchar(512) DEFAULT NULL,
+  `fileType` varchar(50) DEFAULT NULL,
+  `size` bigint NOT NULL,
+  `mimetype` varchar(100) DEFAULT NULL,
+  `width` int DEFAULT NULL,
+  `height` int DEFAULT NULL,
+  `createdAt` timestamp NULL DEFAULT (now()),
+  `updatedAt` timestamp NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+);
+```
+
+**Entity Mapping**: `File` entity
+
+#### 11.4.5 `car_track` - ติดตามรถ
+
+```sql
+CREATE TABLE IF NOT EXISTS `car_track` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `uid` varchar(10) DEFAULT NULL,
+  `status` varchar(50) DEFAULT 'open',
+  `mobile` varchar(20) DEFAULT NULL,
+  `userName` varchar(100) DEFAULT NULL,
+  `room` varchar(50) DEFAULT NULL,
+  `latitude` decimal(12,9) DEFAULT NULL,
+  `longitude` decimal(12,9) DEFAULT NULL,
+  `accuracy` decimal(20,6) DEFAULT NULL,
+  `speed` int DEFAULT NULL,
+  `heading` int DEFAULT NULL,
+  `altitude` float DEFAULT NULL,
+  `altitudeAccuracy` float DEFAULT NULL,
+  `dtmUpdated` datetime DEFAULT (now()),
+  `dtmCreated` datetime DEFAULT (now()),
+  `dtmStarted` datetime DEFAULT NULL,
+  `dtmArrived` datetime DEFAULT NULL,
+  `dtmCanceled` datetime DEFAULT NULL,
+  `dtmCompleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `room` (`room`)
+);
+```
+
+**Entity Mapping**: `CarTrack` entity
+
+### 11.5 Configuration Tables
+
+#### 11.5.1 `node_livekit` - LiveKit Server Configuration
+
+```sql
+CREATE TABLE IF NOT EXISTS `node_livekit` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nodeName` varchar(50) DEFAULT NULL,
+  `livekitHost` varchar(100) DEFAULT NULL,
+  `livekitLocal` varchar(100) DEFAULT NULL,
+  `livekitApiKey` varchar(100) DEFAULT NULL,
+  `livekitApiSecret` varchar(100) DEFAULT NULL,
+  `lastHealthCheck` datetime DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+);
+```
+
+**Entity Mapping**: `NodeLivekit` entity
+
+#### 11.5.2 `color_scheme` - Color Configuration
+
+```sql
+CREATE TABLE IF NOT EXISTS `color_scheme` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `color_hex` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+
+### 11.6 Logging Tables
+
+#### 11.6.1 `notification` - การแจ้งเตือน
+
+```sql
+CREATE TABLE IF NOT EXISTS `notification` (
+  `notificationId` int NOT NULL AUTO_INCREMENT,
+  `userName` varchar(100) DEFAULT NULL,
+  `mobile` varchar(20) DEFAULT NULL,
+  `message` varchar(500) DEFAULT NULL,
+  `caseId` int DEFAULT NULL,
+  `read` tinyint NOT NULL DEFAULT '0',
+  `notificationType` varchar(50) DEFAULT NULL,
+  `relatedUrl` varchar(500) DEFAULT NULL,
+  `dtmRead` datetime DEFAULT NULL,
+  `dtmCreated` datetime NOT NULL DEFAULT (now()),
+  PRIMARY KEY (`notificationId`)
+);
+```
+
+#### 11.6.2 `usage_status_log` - สถานะการใช้งาน
+
+```sql
+CREATE TABLE IF NOT EXISTS `usage_status_log` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `linkID` varchar(100) DEFAULT '',
+  `room` varchar(100) DEFAULT '',
+  `mobile` varchar(100) DEFAULT NULL,
+  `linkType` varchar(100) DEFAULT NULL,
+  `latitude` decimal(12,9) DEFAULT NULL,
+  `longitude` decimal(12,9) DEFAULT NULL,
+  `identity` varchar(100) DEFAULT '',
+  `userName` text,
+  `userType` varchar(50) DEFAULT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `userAgent` text,
+  `data` mediumtext,
+  `dtmCreated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_usage_status_log_linkid` (`linkID`),
+  KEY `idx_usage_status_log_room` (`room`)
+);
+```
+
+#### 11.6.3 `data_log` - ล็อกข้อมูลทั่วไป
+
+```sql
+CREATE TABLE IF NOT EXISTS `data_log` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `data` text,
+  `dtmCreated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+
+### 11.7 Radio Module Tables
+
+#### 11.7.1 `radio_devices`
+
+```sql
+CREATE TABLE IF NOT EXISTS `radio_devices` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `deviceId` varchar(100) DEFAULT NULL,
+  `deviceName` varchar(200) DEFAULT NULL,
+  `deviceType` varchar(50) DEFAULT NULL,
+  `status` varchar(20) DEFAULT 'active',
+  `locationId` int DEFAULT NULL,
+  `frequency` varchar(50) DEFAULT NULL,
+  `radioNo` varchar(50) DEFAULT NULL,
+  `radioName` varchar(50) DEFAULT NULL,
+  `serialNo` varchar(50) DEFAULT NULL,
+  `channel` varchar(50) DEFAULT NULL,
+  `dtmCreated` datetime DEFAULT NULL,
+  `dtmUpdated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+
+#### 11.7.2 `radio_locations`
+
+```sql
+CREATE TABLE IF NOT EXISTS `radio_locations` (
+  `logId` int DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `locationName` varchar(200) DEFAULT NULL,
+  `latitude` decimal(12,9) DEFAULT NULL,
+  `longitude` decimal(12,9) DEFAULT NULL,
+  `address` text,
+  `description` text,
+  `status` varchar(20) DEFAULT 'active',
+  `dtmCreated` datetime DEFAULT NULL,
+  `dtmUpdated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+```
+
+### 11.8 Database Indexes
+
+| Table | Index Name | Columns | Type |
+|-------|-----------|---------|------|
+| `room_conference` | `idx_room_conference_status_dtmexpired` | `status`, `dtmExpired` | INDEX |
+| `room_conference` | `idx_room_conference_room` | `room` | INDEX |
+| `room_conference` | `idx_room_conference_service` | `service` | INDEX |
+| `room_user` | `idx_room_user_identity` | `identity` | INDEX |
+| `room_user` | `idx_room_user_socketId` | `socketId` | INDEX |
+| `link_connect` | `idx_link_connect_expired_enabled` | `dtmExpired`, `enabled` | INDEX |
+| `link_connect` | `idx_link_connect_room` | `room` | INDEX |
+| `link_connect` | `idx_link_connect_linkID` | `linkID` | INDEX |
+| `usage_status_log` | `idx_usage_status_log_linkid` | `linkID` | INDEX |
+| `usage_status_log` | `idx_usage_status_log_room` | `room` | INDEX |
+| `car_track` | `room` | `room` | INDEX |
+
+### 11.9 Foreign Key Relationships
+
+```
+room_conference.nodeLivekitId → node_livekit.id
+link_connect.roomUserId → room_user.id
+```
+
+### 11.10 Entity to Table Mapping
+
+| Domain Entity | Database Table | Repository Interface |
+|--------------|----------------|----------------------|
+| `Room` | `room_conference` | `IRoomRepository` |
+| `User` | `room_user` | `IUserRepository` |
+| `Link` | `link_connect` | `ILinkRepository` |
+| `Message` | `chat_message` | `IMessageRepository` |
+| `Case` | `case_data` | `ICaseRepository` |
+| `Service` | `services` | `IServiceRepository` |
+| `File` | `files` | `IFileRepository` |
+| `RecordMedia` | `record_media` | `IRecordMediaRepository` |
+| `CarTrack` | `car_track` | `ICarTrackRepository` |
+| `NodeLivekit` | `node_livekit` | `INodeLivekitRepository` |
+| `Notification` | `notification` | `INotificationRepository` |
 
 ---
 

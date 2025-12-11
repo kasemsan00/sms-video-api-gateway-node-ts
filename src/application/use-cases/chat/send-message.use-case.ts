@@ -10,7 +10,6 @@ import { IRoomRepository } from '@domain/repositories/room.repository.interface.
 import { Message } from '@domain/entities/message.entity.js';
 import { Result, success, failure } from '@shared/types/index.js';
 import { AppError, RoomNotFoundError, ValidationError, InternalServerError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**

@@ -114,9 +114,8 @@ export class DatabaseConnection {
       });
     });
 
-    this.pool.on('error', (error) => {
-      logger.error('Database pool error', { error });
-    });
+    // Pool error handling removed - use connection-level error handling instead
+    // Note: The error event is not available on the mysql2 pool type
   }
 
   /**

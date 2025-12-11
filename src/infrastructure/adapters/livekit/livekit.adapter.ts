@@ -11,12 +11,12 @@ import {
   EgressClient,
   EncodingOptionsPreset,
   EncodedFileOutput,
+  EncodedFileType,
 } from 'livekit-server-sdk';
 import { injectable } from 'tsyringe';
 import { getLivekitConfig, DEFAULT_TOKEN_GRANTS } from '@config/livekit.config.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError, ExternalServiceError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 import { log as logger } from '@shared/utils/index.js';
 
 export interface TokenOptions {
@@ -139,12 +139,7 @@ export class LiveKitAdapter {
       logger.error('Failed to get LiveKit room', { error: message, roomName });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to get LiveKit room: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'get LiveKit room: ${message}', { originalError: message })
       );
     }
   }
@@ -164,12 +159,7 @@ export class LiveKitAdapter {
       logger.error('Failed to delete LiveKit room', { error: message, roomName });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to delete LiveKit room: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'delete LiveKit room: ${message}', { originalError: message })
       );
     }
   }
@@ -187,12 +177,7 @@ export class LiveKitAdapter {
       logger.error('Failed to list participants', { error: message, roomName });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to list participants: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'list participants: ${message}', { originalError: message })
       );
     }
   }
@@ -216,12 +201,7 @@ export class LiveKitAdapter {
       logger.error('Failed to get participant', { error: message, roomName, identity });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to get participant: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'get participant: ${message}', { originalError: message })
       );
     }
   }
@@ -241,12 +221,7 @@ export class LiveKitAdapter {
       logger.error('Failed to remove participant', { error: message, roomName, identity });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to remove participant: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'remove participant: ${message}', { originalError: message })
       );
     }
   }
@@ -256,10 +231,10 @@ export class LiveKitAdapter {
    */
   async startRecording(options: RecordingOptions): Promise<Result<string, AppError>> {
     try {
-      const fileOutput: EncodedFileOutput = {
-        fileType: 1, // MP4
+      const fileOutput = new EncodedFileOutput({
+        fileType: EncodedFileType.MP4,
         filepath: options.fileOutputPrefix || `recordings/${options.roomName}`,
-      };
+      });
 
       const egressInfo = await this.egressService.startRoomCompositeEgress(
         options.roomName,
@@ -304,12 +279,7 @@ export class LiveKitAdapter {
       logger.error('Failed to stop recording', { error: message, egressId });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to stop recording: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'stop recording: ${message}', { originalError: message })
       );
     }
   }
@@ -333,12 +303,7 @@ export class LiveKitAdapter {
       logger.error('Failed to update participant metadata', { error: message, roomName, identity });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to update participant metadata: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'update participant metadata: ${message}', { originalError: message })
       );
     }
   }
@@ -373,12 +338,7 @@ export class LiveKitAdapter {
       });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to mute participant track: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'mute participant track: ${message}', { originalError: message })
       );
     }
   }
@@ -398,12 +358,7 @@ export class LiveKitAdapter {
       logger.error('Failed to send data', { error: message, roomName });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to send data: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'send data: ${message}', { originalError: message })
       );
     }
   }
@@ -422,12 +377,7 @@ export class LiveKitAdapter {
       logger.error('LiveKit health check failed', { error: message });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `LiveKit health check failed: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new ExternalServiceError('LiveKit', 'LiveKit health check failed: ${message}', { originalError: message })
       );
     }
   }

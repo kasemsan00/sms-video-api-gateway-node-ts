@@ -6,10 +6,10 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import { BaseController } from './base.controller.js';
+import { InvalidInputError } from '@/shared/errors/index.js';
 import { RoomService } from '@/application/services/room.service.js';
 import {
   CreateRoomDto,
-  UpdateRoomDto,
   CloseRoomDto,
   ReopenRoomDto,
   GetRoomDto,
@@ -47,7 +47,7 @@ export class RoomController extends BaseController {
   getRoom = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 
@@ -83,17 +83,16 @@ export class RoomController extends BaseController {
   updateRoom = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 
-    const dto: UpdateRoomDto = {
-      roomName,
-      ...req.body,
-    };
+    // const dto: UpdateRoomDto = {
+    //   roomName: req.params.roomName,
+    // };
 
     // Note: updateRoom method doesn't exist on RoomService, this might need to be implemented
-    this.sendError(res, { message: 'Update room not implemented' }, 501);
+    this.sendError(res, new InvalidInputError('Update room not implemented'));
   };
 
   /**
@@ -103,7 +102,7 @@ export class RoomController extends BaseController {
   closeRoom = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 
@@ -125,13 +124,13 @@ export class RoomController extends BaseController {
   reopenRoom = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 
     const dto: ReopenRoomDto = {
       roomName,
-      expiryDays: req.body.expiryDays,
+      
     };
 
     await this.executeUseCase(
@@ -148,7 +147,7 @@ export class RoomController extends BaseController {
   extendExpiry = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 
@@ -171,7 +170,7 @@ export class RoomController extends BaseController {
   deleteRoom = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 

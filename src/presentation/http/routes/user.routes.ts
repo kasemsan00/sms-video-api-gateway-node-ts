@@ -6,12 +6,11 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
 import { UserController } from '../controllers/user.controller.js';
-import { validateBody, validateParams, validateQuery } from '../middlewares/validation.middleware.js';
+import { validateBody, validateParams } from '../middlewares/validation.middleware.js';
 import {
   GenerateTokenDtoSchema,
   JoinRoomDtoSchema,
   LeaveRoomDtoSchema,
-  ListUsersDtoSchema,
 } from '@/application/dtos/user.dto.js';
 import { z } from 'zod';
 

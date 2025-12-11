@@ -6,11 +6,11 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
 import { RecordController } from '../controllers/record.controller.js';
-import { validateBody, validateParams, validateQuery } from '../middlewares/validation.middleware.js';
-import {
-  StartRecordingDtoSchema,
-  ListRecordingsDtoSchema,
-} from '@/application/dtos/record.dto.js';
+import { validateParams } from '../middlewares/validation.middleware.js';
+// import {
+//   StartRecordingDtoSchema,
+//   ListRecordingsDtoSchema,
+// } from '@/application/dtos/record.dto.js';
 import { z } from 'zod';
 
 const router = Router();

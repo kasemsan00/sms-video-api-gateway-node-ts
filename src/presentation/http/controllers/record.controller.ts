@@ -6,6 +6,7 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import { BaseController } from './base.controller.js';
+import { InvalidInputError } from '@/shared/errors/index.js';
 import { RecordService } from '@/application/services/record.service.js';
 import {
   StartRecordingDto,
@@ -47,12 +48,13 @@ export class RecordController extends BaseController {
   stopRecording = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 
     const dto: StopRecordingDto = {
       room: roomName,
+      egressId: req.params.recordingId || req.body.egressId,
     };
 
     await this.executeUseCase(
@@ -69,7 +71,7 @@ export class RecordController extends BaseController {
   getRecording = async (req: Request, res: Response): Promise<void> => {
     const egressId = req.params.egressId || req.params.recordingId;
     if (!egressId) {
-      this.sendError(res, { message: 'Recording ID is required' }, 400);
+      this.sendError(res, new InvalidInputError('Recording ID is required'));
       return;
     }
 
@@ -91,7 +93,7 @@ export class RecordController extends BaseController {
   listRecordings = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 

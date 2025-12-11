@@ -7,8 +7,7 @@ import mysql, { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mys
 import { getDatabaseConfig } from '@config/database.config.js';
 import { log as logger } from '@shared/utils/index.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
+import { AppError, DatabaseError } from '@shared/errors/index.js';
 
 /**
  * MySQL Connection Manager
@@ -63,12 +62,7 @@ export class MySqlConnection {
       logger.error('Failed to connect to database', { error: message });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
-          `Failed to connect to database: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new DatabaseError(`Failed to connect to database: ${message}`, { originalError: message })
       );
     }
   }
@@ -78,11 +72,7 @@ export class MySqlConnection {
    */
   public getPool(): Pool {
     if (!this.pool || !this.isConnected) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Database not connected. Call connect() first.',
-        500
-      );
+      throw new DatabaseError('Database not connected. Call connect() first.');
     }
     return this.pool;
   }
@@ -94,11 +84,7 @@ export class MySqlConnection {
     try {
       if (!this.pool || !this.isConnected) {
         return failure(
-          new AppError(
-            ErrorCode.DATABASE_ERROR,
-            'Database not connected. Call connect() first.',
-            500
-          )
+          new DatabaseError('Database not connected. Call connect() first.')
         );
       }
 
@@ -109,12 +95,7 @@ export class MySqlConnection {
       logger.error('Failed to get database connection', { error: message });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
-          `Failed to get database connection: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new DatabaseError(`Failed to get database connection: ${message}`, { originalError: message })
       );
     }
   }
@@ -129,11 +110,7 @@ export class MySqlConnection {
     try {
       if (!this.pool || !this.isConnected) {
         return failure(
-          new AppError(
-            ErrorCode.DATABASE_ERROR,
-            'Database not connected. Call connect() first.',
-            500
-          )
+          new DatabaseError('Database not connected. Call connect() first.')
         );
       }
 
@@ -147,12 +124,7 @@ export class MySqlConnection {
       });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
-          `Database query failed: ${message}`,
-          500,
-          { originalError: message, sql }
-        )
+        new DatabaseError(`Database query failed: ${message}`, { originalError: message, sql })
       );
     }
   }
@@ -187,12 +159,7 @@ export class MySqlConnection {
       logger.error('Transaction failed', { error: message });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
-          `Transaction failed: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new DatabaseError(`Transaction failed: ${message}`, { originalError: message })
       );
     }
   }
@@ -204,11 +171,7 @@ export class MySqlConnection {
     try {
       if (!this.pool || !this.isConnected) {
         return failure(
-          new AppError(
-            ErrorCode.DATABASE_ERROR,
-            'Database not connected',
-            500
-          )
+          new DatabaseError('Database not connected')
         );
       }
 
@@ -220,12 +183,7 @@ export class MySqlConnection {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
-          `Health check failed: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new DatabaseError(`Health check failed: ${message}`, { originalError: message })
       );
     }
   }
@@ -251,12 +209,7 @@ export class MySqlConnection {
       logger.error('Failed to disconnect from database', { error: message });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
-          `Failed to disconnect: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new DatabaseError(`Failed to disconnect: ${message}`, { originalError: message })
       );
     }
   }

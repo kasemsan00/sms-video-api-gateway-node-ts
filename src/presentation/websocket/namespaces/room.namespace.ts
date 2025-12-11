@@ -6,19 +6,16 @@
 import { container } from 'tsyringe';
 import { BaseNamespace, TypedSocket } from './base.namespace.js';
 import { ChatService } from '@/application/services/chat.service.js';
-import { UserService } from '@/application/services/user.service.js';
 import { LinkService } from '@/application/services/link.service.js';
 import { log as logger } from '@shared/utils/index.js';
 
 export class RoomNamespace extends BaseNamespace {
   private chatService: ChatService;
-  private userService: UserService;
   private linkService: LinkService;
 
   constructor(namespace: any) {
     super(namespace);
     this.chatService = container.resolve('ChatService' as any);
-    this.userService = container.resolve('UserService' as any);
     this.linkService = container.resolve('LinkService' as any);
   }
 
@@ -49,7 +46,7 @@ export class RoomNamespace extends BaseNamespace {
     this.setupPositionHandlers(socket);
   }
 
-  protected onDisconnect(socket: TypedSocket, reason: string): void {
+  protected onDisconnect(socket: TypedSocket, _reason: string): void {
     const room = socket.data.room;
     const identity = socket.data.identity;
 
@@ -75,7 +72,7 @@ export class RoomNamespace extends BaseNamespace {
           room: data.room,
           identity: data.identity,
           message: data.message,
-          name: data.name,
+          name: data.name ?? 'Unknown',
         });
 
         if (result.isSuccess) {
@@ -230,6 +227,6 @@ export class RoomNamespace extends BaseNamespace {
   private extractRoomId(socket: TypedSocket): string | null {
     const namespace = socket.nsp.name;
     const match = namespace.match(/^\/(.+)$/);
-    return match ? match[1] : null;
+    return match ? (match[1] ?? null) : null;
   }
 }

@@ -10,7 +10,6 @@ import { ICaseRepository } from '@domain/repositories/case.repository.interface.
 import { PaginatedResult, PaginationParams } from '@shared/types/pagination.type.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError, DatabaseError, CaseNotFoundError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
 export class MySqlCaseRepository extends BaseRepository<Case> implements ICaseRepository {

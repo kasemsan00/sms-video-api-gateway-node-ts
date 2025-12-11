@@ -6,10 +6,10 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import { BaseController } from './base.controller.js';
+import { InvalidInputError } from '@/shared/errors/index.js';
 import { ChatService } from '@/application/services/chat.service.js';
 import {
   SendMessageDto,
-  GetMessageDto,
   GetMessagesDto,
   DeleteMessageDto,
   MarkMessagesReadDto,
@@ -41,24 +41,17 @@ export class ChatController extends BaseController {
   /**
    * Get single message
    * GET /api/chat/messages/:messageId
+   * Note: This endpoint is commented out as getMessage is not implemented in ChatService
    */
-  getMessage = async (req: Request, res: Response): Promise<void> => {
-    const messageId = req.params.messageId;
-    if (!messageId) {
-      this.sendError(res, { message: 'Message ID is required' }, 400);
-      return;
-    }
-
-    const dto: GetMessageDto = {
-      messageId: parseInt(messageId),
-    };
-
-    await this.executeUseCase(
-      req,
-      res,
-      () => this.chatService.getMessage(dto)
-    );
-  };
+  // getMessage = async (req: Request, res: Response): Promise<void> => {
+  //   const messageId = req.params.messageId;
+  //   if (!messageId) {
+  //     this.sendError(res, new InvalidInputError('Message ID is required'));
+  //     return;
+  //   }
+  //   // TODO: Implement getMessage in ChatService
+  //   this.sendError(res, new InternalServerError('Not implemented'));
+  // };
 
   /**
    * Get chat history with pagination
@@ -67,7 +60,7 @@ export class ChatController extends BaseController {
   getMessages = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 
@@ -91,7 +84,7 @@ export class ChatController extends BaseController {
   deleteMessage = async (req: Request, res: Response): Promise<void> => {
     const messageId = req.params.messageId;
     if (!messageId) {
-      this.sendError(res, { message: 'Message ID is required' }, 400);
+      this.sendError(res, new InvalidInputError('Message ID is required'));
       return;
     }
 
@@ -120,7 +113,7 @@ export class ChatController extends BaseController {
   markAsRead = async (req: Request, res: Response): Promise<void> => {
     const roomName = req.params.roomName;
     if (!roomName) {
-      this.sendError(res, { message: 'Room name is required' }, 400);
+      this.sendError(res, new InvalidInputError('Room name is required'));
       return;
     }
 

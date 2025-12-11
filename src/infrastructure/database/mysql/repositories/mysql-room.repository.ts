@@ -12,7 +12,6 @@ import { RoomType } from '@shared/constants/room-types.constant.js';
 import { PaginatedResult, PaginationParams } from '@shared/types/pagination.type.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError, DatabaseError, RoomNotFoundError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
 export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRepository {
@@ -84,7 +83,7 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
       throw result.error;
     }
 
-    return result.value.length > 0 ? result.value[0] : null;
+    return result.value.length > 0 ? (result.value[0] ?? null) : null;
   }
 
   /**
@@ -143,19 +142,6 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     }
 
     return rooms;
-  }
-
-  /**
-   * Check if room exists by name
-   */
-  async exists(name: string): Promise<boolean> {
-    const result = await super.exists({ room: name });
-
-    if (result.isFailure) {
-      throw result.error;
-    }
-
-    return result.value;
   }
 
   /**
@@ -292,6 +278,14 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     if (result.value === 0) {
       throw new RoomNotFoundError(id.toString());
     }
+  }
+
+  /**
+   * Check if room exists
+   */
+  public async exists(name: string): Promise<boolean> {
+    const result = await this.checkExists({ room: name });
+    return result.isFailure ? false : result.value;
   }
 
   /**

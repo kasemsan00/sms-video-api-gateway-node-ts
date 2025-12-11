@@ -5,7 +5,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { ZodSchema, ZodError } from 'zod';
-import { AppError } from '@/shared/errors/base.error.js';
+import { ValidationError } from '@/shared/errors/index.js';
 
 export interface ValidationTarget {
   body?: ZodSchema;
@@ -37,10 +37,8 @@ export const validate = (schemas: ValidationTarget) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const validationError = new AppError(
-          'VALIDATION_ERROR',
+        const validationError = new ValidationError(
           'Validation failed',
-          400,
           error.issues.map((e) => ({
             path: e.path.join('.'),
             message: e.message,

@@ -3,13 +3,13 @@
  * Creates and configures HTTP and WebSocket servers
  */
 
-import { createServer } from 'http';
+import { createServer as createHttpServer } from 'http';
 import { createExpressApp } from './http/app.js';
 import { createSocketServer } from './websocket/socket.server.js';
 import { log as logger } from '@shared/utils/index.js';
 
 export class Server {
-  private httpServer: ReturnType<typeof createServer>;
+  private httpServer: ReturnType<typeof createHttpServer>;
   private expressApp: ReturnType<typeof createExpressApp>;
   private socketServer: ReturnType<typeof createSocketServer>;
   private port: number;
@@ -17,7 +17,7 @@ export class Server {
   constructor(port: number = 3000) {
     this.port = port;
     this.expressApp = createExpressApp();
-    this.httpServer = createServer(this.expressApp);
+    this.httpServer = createHttpServer(this.expressApp);
     this.socketServer = createSocketServer(this.httpServer);
   }
 
@@ -69,7 +69,7 @@ export class Server {
   /**
    * Get HTTP server instance
    */
-  public getHttpServer() {
+  public getHttpServer(): ReturnType<typeof createHttpServer> {
     return this.httpServer;
   }
 

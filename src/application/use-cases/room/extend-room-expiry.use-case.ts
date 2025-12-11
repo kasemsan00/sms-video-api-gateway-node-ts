@@ -8,7 +8,6 @@ import { ExtendRoomExpiryDto, RoomResponseDto } from '@application/dtos/index.js
 import { IRoomRepository } from '@domain/repositories/room.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
 import { AppError, RoomNotFoundError, BusinessRuleViolationError, InternalServerError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**

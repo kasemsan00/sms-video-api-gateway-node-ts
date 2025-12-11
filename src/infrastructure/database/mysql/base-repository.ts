@@ -271,9 +271,9 @@ export abstract class BaseRepository<T> {
   }
 
   /**
-   * Check if record exists
+   * Check if record exists (internal method)
    */
-  protected async exists(conditions: Record<string, unknown>): Promise<Result<boolean, AppError>> {
+  protected async checkExists(conditions: Record<string, unknown>): Promise<Result<boolean, AppError>> {
     const sql = `SELECT EXISTS(SELECT 1 FROM \`${this.tableName}\` WHERE ${Object.keys(conditions)
       .map((key) => `\`${key}\` = ?`)
       .join(' AND ')}) as \`exists\``;

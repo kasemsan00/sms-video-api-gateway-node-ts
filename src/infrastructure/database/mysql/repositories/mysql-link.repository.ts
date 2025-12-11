@@ -11,7 +11,6 @@ import { LinkType } from '@shared/constants/link-types.constant.js';
 import { UserType } from '@shared/constants/user-types.constant.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError, DatabaseError, LinkNotFoundError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
 export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRepository {
@@ -171,14 +170,9 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
   /**
    * Check if link exists
    */
-  async exists(linkId: string): Promise<boolean> {
-    const result = await super.exists({ linkID: linkId });
-
-    if (result.isFailure) {
-      throw result.error;
-    }
-
-    return result.value;
+  public async exists(linkId: string): Promise<boolean> {
+    const result = await this.checkExists({ linkID: linkId });
+    return result.isFailure ? false : result.value;
   }
 
   /**

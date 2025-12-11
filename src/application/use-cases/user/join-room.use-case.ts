@@ -9,7 +9,6 @@ import { IUserRepository } from '@domain/repositories/user.repository.interface.
 import { User } from '@domain/entities/user.entity.js';
 import { Result, success, failure } from '@shared/types/index.js';
 import { AppError, ValidationError, InternalServerError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**

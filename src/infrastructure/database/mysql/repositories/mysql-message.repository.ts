@@ -10,7 +10,6 @@ import { IMessageRepository } from '@domain/repositories/message.repository.inte
 import { PaginatedResult, PaginationParams } from '@shared/types/pagination.type.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError, DatabaseError, MessageNotFoundError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
 export class MySqlMessageRepository extends BaseRepository<Message> implements IMessageRepository {
@@ -104,7 +103,7 @@ export class MySqlMessageRepository extends BaseRepository<Message> implements I
         { field: 'room', operator: '=', value: room },
         { field: 'isDeleted', operator: '=', value: 0 },
       ])
-      .orderBy('dtmCreated', 'DESC')
+      .orderBy([{ field: 'dtmCreated', direction: 'DESC' }])
       .limit(limit)
       .build();
 

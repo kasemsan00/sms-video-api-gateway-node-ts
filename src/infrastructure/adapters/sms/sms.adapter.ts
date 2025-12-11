@@ -5,8 +5,7 @@
 
 import { injectable } from 'tsyringe';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
+import { AppError, SmsServiceError, InvalidInputError } from '@shared/errors/index.js';
 import { log as logger } from '@shared/utils/index.js';
 
 export interface SendSmsOptions {
@@ -25,6 +24,15 @@ export interface ISmsGateway {
   send(options: SendSmsOptions): Promise<Result<SmsResponse, AppError>>;
   checkStatus(messageId: string): Promise<Result<string, AppError>>;
   getBalance(): Promise<Result<number, AppError>>;
+}
+
+// Type for SMS API responses
+interface SmsApiResponse {
+  messageId?: string;
+  id?: string;
+  status?: string;
+  cost?: number;
+  balance?: number;
 }
 
 /**
@@ -88,15 +96,11 @@ export class HttpSmsGateway implements ISmsGateway {
       if (!response.ok) {
         const errorText = await response.text();
         return failure(
-          new AppError(
-            ErrorCode.EXTERNAL_SERVICE_ERROR,
-            `SMS gateway error: ${errorText}`,
-            response.status
-          )
+          new SmsServiceError('SMS gateway error: ' + errorText)
         );
       }
 
-      const data = await response.json();
+      const data = await response.json() as SmsApiResponse;
 
       logger.info('SMS sent successfully', {
         to: options.to,
@@ -104,7 +108,7 @@ export class HttpSmsGateway implements ISmsGateway {
       });
 
       return success({
-        messageId: data.messageId || data.id,
+        messageId: data.messageId || data.id || 'unknown',
         status: data.status === 'success' ? 'sent' : 'pending',
         cost: data.cost,
       });
@@ -113,12 +117,7 @@ export class HttpSmsGateway implements ISmsGateway {
       logger.error('Failed to send SMS', { error: message, options });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to send SMS: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new SmsServiceError('Failed to send SMS: ${message}', { originalError: message })
       );
     }
   }
@@ -134,27 +133,18 @@ export class HttpSmsGateway implements ISmsGateway {
       if (!response.ok) {
         const errorText = await response.text();
         return failure(
-          new AppError(
-            ErrorCode.EXTERNAL_SERVICE_ERROR,
-            `Failed to check SMS status: ${errorText}`,
-            response.status
-          )
+          new SmsServiceError('Failed to check SMS status: ' + errorText)
         );
       }
 
-      const data = await response.json();
-      return success(data.status);
+      const data = await response.json() as SmsApiResponse;
+      return success(data.status || 'unknown');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Failed to check SMS status', { error: message, messageId });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to check SMS status: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new SmsServiceError('Failed to check SMS status: ${message}', { originalError: message })
       );
     }
   }
@@ -170,27 +160,18 @@ export class HttpSmsGateway implements ISmsGateway {
       if (!response.ok) {
         const errorText = await response.text();
         return failure(
-          new AppError(
-            ErrorCode.EXTERNAL_SERVICE_ERROR,
-            `Failed to get balance: ${errorText}`,
-            response.status
-          )
+          new SmsServiceError('Failed to get balance: ' + errorText)
         );
       }
 
-      const data = await response.json();
-      return success(data.balance);
+      const data = await response.json() as SmsApiResponse;
+      return success(data.balance || 0);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Failed to get SMS balance', { error: message });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `Failed to get SMS balance: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new SmsServiceError('Failed to get SMS balance: ${message}', { originalError: message })
       );
     }
   }
@@ -231,23 +212,14 @@ export class SmsAdapter {
     const phonePattern = /^0\d{9}$/;
     if (!phonePattern.test(to)) {
       return failure(
-        new AppError(
-          ErrorCode.INVALID_INPUT,
-          'Invalid phone number format. Expected Thai format: 0XXXXXXXXX',
-          400,
-          { phoneNumber: to }
-        )
+        new InvalidInputError('Invalid phone number format. Expected Thai format: 0XXXXXXXXX')
       );
     }
 
     // Validate message
     if (!message || message.trim().length === 0) {
       return failure(
-        new AppError(
-          ErrorCode.INVALID_INPUT,
-          'SMS message cannot be empty',
-          400
-        )
+        new InvalidInputError('SMS message cannot be empty')
       );
     }
 
@@ -330,12 +302,7 @@ export class SmsAdapter {
       logger.error('SMS health check failed', { error: message });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
-          `SMS health check failed: ${message}`,
-          500,
-          { originalError: message }
-        )
+        new SmsServiceError('SMS health check failed: ${message}', { originalError: message })
       );
     }
   }

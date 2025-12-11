@@ -5,7 +5,7 @@
 
 import { Request, Response } from 'express';
 import { Result } from '@/shared/types/result.type.js';
-import { AppError } from '@/shared/errors/base.error.js';
+import { AppError, InternalServerError } from '@/shared/errors/index.js';
 import { successResponse, errorResponse } from '@/shared/types/api-response.type.js';
 import { log } from '@/shared/utils/logger.util.js';
 
@@ -36,11 +36,7 @@ export abstract class BaseController {
 
       this.sendError(
         res,
-        new AppError(
-          'INTERNAL_ERROR',
-          'An unexpected error occurred',
-          500
-        )
+        new InternalServerError('An unexpected error occurred')
       );
     }
   }

@@ -7,8 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { GetMessagesDto, GetMessagesResponseDto, MessageResponseDto } from '@application/dtos/index.js';
 import { IMessageRepository } from '@domain/repositories/message.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError, InternalServerError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/index.js';
+import { AppError, InternalServerError } from '@shared/errors/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**

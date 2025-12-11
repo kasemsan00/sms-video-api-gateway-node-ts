@@ -5,7 +5,7 @@
 
 import 'reflect-metadata';
 import { container } from 'tsyringe';
-import { INJECTION_TOKENS } from './types.js';
+// import { INJECTION_TOKENS } from './types.js';
 
 /**
  * Register dependencies

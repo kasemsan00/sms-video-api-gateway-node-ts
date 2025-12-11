@@ -10,7 +10,6 @@ import { Room } from '@domain/entities/room.entity.js';
 import { LiveKitAdapter } from '@infrastructure/adapters/livekit/livekit.adapter.js';
 import { Result, success, failure } from '@shared/types/index.js';
 import { AppError, RoomAlreadyExistsError, ValidationError, InternalServerError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**

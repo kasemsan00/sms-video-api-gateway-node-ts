@@ -10,8 +10,8 @@ import { IRoomRepository } from '@domain/repositories/room.repository.interface.
 import { Link } from '@domain/entities/link.entity.js';
 import { SmsAdapter } from '@infrastructure/adapters/sms/sms.adapter.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError, InternalServerError, ValidationError, BusinessRuleViolationError } from '@shared/errors/index.js';
-import { ErrorCode, LinkType } from '@shared/constants/index.js';
+import { AppError, RoomNotFoundError, InternalServerError, ValidationError } from '@shared/errors/index.js';
+import { LinkType } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**

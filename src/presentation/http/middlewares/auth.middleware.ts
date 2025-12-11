@@ -5,7 +5,7 @@
 
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AppError } from '@/shared/errors/base.error.js';
+import { UnauthorizedError, InvalidTokenError, TokenExpiredError, ForbiddenError } from '@shared/errors/index.js';
 import { log as logger } from '@shared/utils/index.js';
 
 // Extend Express Request type
@@ -36,7 +36,7 @@ export interface JwtPayload {
  */
 export const authenticate = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): void => {
   try {
@@ -44,11 +44,7 @@ export const authenticate = (
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      throw new AppError(
-        'UNAUTHORIZED',
-        'No authorization token provided',
-        401
-      );
+      throw new UnauthorizedError('No authorization token provided');
     }
 
     // Extract token (Bearer <token>)
@@ -57,11 +53,7 @@ export const authenticate = (
       : authHeader;
 
     if (!token) {
-      throw new AppError(
-        'UNAUTHORIZED',
-        'Invalid authorization header format',
-        401
-      );
+      throw new UnauthorizedError('Invalid authorization header format');
     }
 
     // Verify token
@@ -80,19 +72,11 @@ export const authenticate = (
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       next(
-        new AppError(
-          'INVALID_TOKEN',
-          'Invalid or expired token',
-          401
-        )
+        new InvalidTokenError('Invalid or expired token')
       );
     } else if (error instanceof jwt.TokenExpiredError) {
       next(
-        new AppError(
-          'TOKEN_EXPIRED',
-          'Token has expired',
-          401
-        )
+        new TokenExpiredError()
       );
     } else {
       next(error);
@@ -105,7 +89,7 @@ export const authenticate = (
  */
 export const optionalAuth = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): void => {
   try {
@@ -148,25 +132,17 @@ export const optionalAuth = (
  * Require specific user type
  */
 export const requireUserType = (...allowedTypes: string[]) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return (req: Request, _res: Response, next: NextFunction): void => {
     if (!req.user) {
       next(
-        new AppError(
-          'UNAUTHORIZED',
-          'Authentication required',
-          401
-        )
+        new UnauthorizedError('Authentication required')
       );
       return;
     }
 
     if (!req.user.userType || !allowedTypes.includes(req.user.userType)) {
       next(
-        new AppError(
-          'FORBIDDEN',
-          'Insufficient permissions',
-          403
-        )
+        new ForbiddenError('Insufficient permissions')
       );
       return;
     }

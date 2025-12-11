@@ -9,7 +9,6 @@ import { Service } from '@domain/entities/service.entity.js';
 import { IServiceRepository } from '@domain/repositories/service.repository.interface.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError, DatabaseError, NotFoundError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
 export class MySqlServiceRepository extends BaseRepository<Service> implements IServiceRepository {
@@ -83,7 +82,7 @@ export class MySqlServiceRepository extends BaseRepository<Service> implements I
       throw result.error;
     }
 
-    return result.value.length > 0 ? result.value[0] : null;
+    return result.value.length > 0 ? (result.value[0] ?? null) : null;
   }
 
   /**

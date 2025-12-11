@@ -10,7 +10,6 @@ import { IUserRepository } from '@domain/repositories/user.repository.interface.
 import { UserType } from '@shared/constants/user-types.constant.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError, DatabaseError, UserNotFoundError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
 export class MySqlUserRepository extends BaseRepository<User> implements IUserRepository {
@@ -106,7 +105,7 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
       throw result.error;
     }
 
-    return result.value.length > 0 ? result.value[0] : null;
+    return result.value.length > 0 ? (result.value[0] ?? null) : null;
   }
 
   /**
@@ -132,7 +131,7 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
       throw result.error;
     }
 
-    return result.value.length > 0 ? result.value[0] : null;
+    return result.value.length > 0 ? (result.value[0] ?? null) : null;
   }
 
   /**
@@ -153,19 +152,6 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
    */
   async findOnlineUsersByRoom(room: string): Promise<User[]> {
     const result = await this.findBy({ room, isOnline: 1 });
-
-    if (result.isFailure) {
-      throw result.error;
-    }
-
-    return result.value;
-  }
-
-  /**
-   * Check if user exists by room and identity
-   */
-  async exists(room: string, identity: string): Promise<boolean> {
-    const result = await super.exists({ room, identity });
 
     if (result.isFailure) {
       throw result.error;
@@ -313,6 +299,14 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
     }
 
     return result.value;
+  }
+
+  /**
+   * Check if user exists
+   */
+  public async exists(room: string, identity: string): Promise<boolean> {
+    const result = await this.checkExists({ room, identity });
+    return result.isFailure ? false : result.value;
   }
 
   /**

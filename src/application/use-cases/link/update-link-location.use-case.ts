@@ -8,7 +8,6 @@ import { UpdateLinkLocationDto, LinkResponseDto } from '@application/dtos/index.
 import { ILinkRepository } from '@domain/repositories/link.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
 import { AppError, LinkNotFoundError, BusinessRuleViolationError, InternalServerError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**

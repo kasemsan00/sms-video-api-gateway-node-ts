@@ -6,10 +6,9 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
 import { ChatController } from '../controllers/chat.controller.js';
-import { validateBody, validateParams, validateQuery } from '../middlewares/validation.middleware.js';
+import { validateBody, validateParams } from '../middlewares/validation.middleware.js';
 import {
   SendMessageDtoSchema,
-  GetMessagesDtoSchema,
 } from '@/application/dtos/chat.dto.js';
 import { z } from 'zod';
 
@@ -34,12 +33,13 @@ router.post(
 /**
  * GET /api/chat/messages/:messageId
  * Get single message
+ * Note: getMessage method is not implemented in ChatController
  */
-router.get(
-  '/messages/:messageId',
-  validateParams(messageIdSchema),
-  chatController.getMessage
-);
+// router.get(
+//   '/messages/:messageId',
+//   validateParams(messageIdSchema),
+//   chatController.getMessage
+// );
 
 /**
  * DELETE /api/chat/messages/:messageId

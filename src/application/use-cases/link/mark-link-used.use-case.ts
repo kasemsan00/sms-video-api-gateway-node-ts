@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { MarkLinkUsedDto, LinkResponseDto } from '@application/dtos/index.js';
 import { ILinkRepository } from '@domain/repositories/link.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, LinkNotFoundError } from '@shared/errors/index.js';
+import { AppError, LinkNotFoundError, BusinessRuleViolationError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -45,10 +45,8 @@ export class MarkLinkUsedUseCase {
           error: markResult.error,
         });
         return failure(
-          new AppError(
-            ErrorCode.BUSINESS_RULE_VIOLATION,
+          new BusinessRuleViolationError(
             markResult.error.message,
-            400,
             { details: markResult.error }
           )
         );
@@ -99,10 +97,8 @@ export class MarkLinkUsedUseCase {
       logger.error('Error marking link as used', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to mark link as used: ${message}`,
-          500,
           { originalError: message }
         )
       );

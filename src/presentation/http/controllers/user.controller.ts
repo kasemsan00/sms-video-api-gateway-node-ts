@@ -72,9 +72,15 @@ export class UserController extends BaseController {
    * GET /api/users/:identity
    */
   getUser = async (req: Request, res: Response): Promise<void> => {
+    const identity = req.params.identity;
+    if (!identity) {
+      this.sendError(res, { message: 'User identity is required' }, 400);
+      return;
+    }
+
     const dto: GetUserDto = {
-      identity: req.params.identity,
-      room: req.query.room as string,
+      identity,
+      room: (req.query.room as string) || undefined,
     };
 
     await this.executeUseCase(
@@ -89,9 +95,15 @@ export class UserController extends BaseController {
    * GET /api/rooms/:roomName/users
    */
   listUsers = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: ListUsersDto = {
-      room: req.params.roomName,
-      userType: req.query.userType as string,
+      room: roomName,
+      userType: (req.query.userType as string) || undefined,
       page: req.query.page ? parseInt(req.query.page as string) : 1,
       limit: req.query.limit ? parseInt(req.query.limit as string) : 20,
     };
@@ -108,9 +120,16 @@ export class UserController extends BaseController {
    * DELETE /api/rooms/:roomName/users/:identity
    */
   removeUser = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    const identity = req.params.identity;
+    if (!roomName || !identity) {
+      this.sendError(res, { message: 'Room name and identity are required' }, 400);
+      return;
+    }
+
     const dto: LeaveRoomDto = {
-      room: req.params.roomName,
-      identity: req.params.identity,
+      room: roomName,
+      identity,
     };
 
     await this.executeUseCase(

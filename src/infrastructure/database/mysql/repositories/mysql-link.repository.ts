@@ -10,7 +10,7 @@ import { ILinkRepository } from '@domain/repositories/link.repository.interface.
 import { LinkType } from '@shared/constants/link-types.constant.js';
 import { UserType } from '@shared/constants/user-types.constant.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
+import { AppError, DatabaseError, LinkNotFoundError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
@@ -49,10 +49,8 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Failed to map link from database: ${message}`,
-          500,
           { row, originalError: message }
         )
       );
@@ -96,7 +94,7 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
       throw result.error;
     }
 
-    return result.value.length > 0 ? result.value[0] : null;
+    return result.value.length > 0 ? (result.value[0] ?? null) : null;
   }
 
   /**
@@ -174,7 +172,7 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
    * Check if link exists
    */
   async exists(linkId: string): Promise<boolean> {
-    const result = await this.exists({ linkID: linkId });
+    const result = await super.exists({ linkID: linkId });
 
     if (result.isFailure) {
       throw result.error;
@@ -200,11 +198,7 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
     // Fetch the created link
     const createdLink = await this.findByLinkId(link.linkId);
     if (!createdLink) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch created link',
-        500
-      );
+      throw new DatabaseError('Failed to fetch created link');
     }
 
     return createdLink;
@@ -225,21 +219,13 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.LINK_NOT_FOUND,
-        `Link with ID ${link.linkId} not found`,
-        404
-      );
+      throw new LinkNotFoundError(link.linkId);
     }
 
     // Fetch the updated link
     const updatedLink = await this.findByLinkId(link.linkId);
     if (!updatedLink) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch updated link',
-        500
-      );
+      throw new DatabaseError('Failed to fetch updated link');
     }
 
     return updatedLink;
@@ -259,11 +245,7 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.LINK_NOT_FOUND,
-        `Link with ID ${linkId} not found`,
-        404
-      );
+      throw new LinkNotFoundError(linkId);
     }
   }
 
@@ -310,11 +292,7 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.LINK_NOT_FOUND,
-        `Link with ID ${linkId} not found`,
-        404
-      );
+      throw new LinkNotFoundError(linkId);
     }
   }
 
@@ -336,11 +314,7 @@ export class MySqlLinkRepository extends BaseRepository<Link> implements ILinkRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.LINK_NOT_FOUND,
-        `Link with ID ${linkId} not found`,
-        404
-      );
+      throw new LinkNotFoundError(linkId);
     }
   }
 

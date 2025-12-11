@@ -45,8 +45,14 @@ export class RecordController extends BaseController {
    * POST /api/rooms/:roomName/recording/stop
    */
   stopRecording = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: StopRecordingDto = {
-      roomName: req.params.roomName,
+      room: roomName,
     };
 
     await this.executeUseCase(
@@ -61,8 +67,14 @@ export class RecordController extends BaseController {
    * GET /api/recordings/:recordingId
    */
   getRecording = async (req: Request, res: Response): Promise<void> => {
+    const egressId = req.params.egressId || req.params.recordingId;
+    if (!egressId) {
+      this.sendError(res, { message: 'Recording ID is required' }, 400);
+      return;
+    }
+
     const dto: GetRecordingDto = {
-      recordingId: req.params.recordingId,
+      egressId,
     };
 
     await this.executeUseCase(
@@ -77,8 +89,14 @@ export class RecordController extends BaseController {
    * GET /api/rooms/:roomName/recordings
    */
   listRecordings = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: ListRecordingsDto = {
-      roomName: req.params.roomName,
+      room: roomName,
       page: req.query.page ? parseInt(req.query.page as string) : 1,
       limit: req.query.limit ? parseInt(req.query.limit as string) : 20,
     };

@@ -7,7 +7,7 @@ import { injectable } from 'tsyringe';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError } from '@shared/errors/base.error.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';
-import { logger } from '@shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export interface SendSmsOptions {
   to: string;

@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { GenerateTokenDto, GenerateTokenResponseDto } from '@application/dtos/index.js';
 import { LiveKitAdapter } from '@infrastructure/adapters/livekit/livekit.adapter.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
+import { AppError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -73,10 +73,8 @@ export class GenerateTokenUseCase {
       logger.error('Error generating token', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to generate token: ${message}`,
-          500,
           { originalError: message }
         )
       );

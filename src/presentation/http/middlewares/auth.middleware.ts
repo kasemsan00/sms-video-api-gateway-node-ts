@@ -6,7 +6,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { AppError } from '@/shared/errors/base.error.js';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 // Extend Express Request type
 declare global {

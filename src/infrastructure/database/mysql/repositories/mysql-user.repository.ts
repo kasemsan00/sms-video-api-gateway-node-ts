@@ -9,7 +9,7 @@ import { User } from '@domain/entities/user.entity.js';
 import { IUserRepository } from '@domain/repositories/user.repository.interface.js';
 import { UserType } from '@shared/constants/user-types.constant.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
+import { AppError, DatabaseError, UserNotFoundError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
@@ -48,10 +48,8 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Failed to map user from database: ${message}`,
-          500,
           { row, originalError: message }
         )
       );
@@ -167,7 +165,7 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
    * Check if user exists by room and identity
    */
   async exists(room: string, identity: string): Promise<boolean> {
-    const result = await this.exists({ room, identity });
+    const result = await super.exists({ room, identity });
 
     if (result.isFailure) {
       throw result.error;
@@ -195,11 +193,7 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
     // Fetch the created user
     const createdUser = await this.findById(insertId);
     if (!createdUser) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch created user',
-        500
-      );
+      throw new DatabaseError('Failed to fetch created user');
     }
 
     return createdUser;
@@ -220,21 +214,13 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.USER_NOT_FOUND,
-        `User with ID ${user.id} not found`,
-        404
-      );
+      throw new UserNotFoundError(user.id.toString());
     }
 
     // Fetch the updated user
     const updatedUser = await this.findById(user.id);
     if (!updatedUser) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch updated user',
-        500
-      );
+      throw new DatabaseError('Failed to fetch updated user');
     }
 
     return updatedUser;
@@ -254,11 +240,7 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.USER_NOT_FOUND,
-        `User with ID ${id} not found`,
-        404
-      );
+      throw new UserNotFoundError(id.toString());
     }
   }
 
@@ -294,11 +276,7 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.USER_NOT_FOUND,
-        `User with ID ${id} not found`,
-        404
-      );
+      throw new UserNotFoundError(id.toString());
     }
   }
 
@@ -320,11 +298,7 @@ export class MySqlUserRepository extends BaseRepository<User> implements IUserRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.USER_NOT_FOUND,
-        `User with ID ${id} not found`,
-        404
-      );
+      throw new UserNotFoundError(id.toString());
     }
   }
 

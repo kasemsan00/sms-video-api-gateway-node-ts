@@ -3,11 +3,10 @@
  * Retrieves recording details by egressId
  */
 
-import { injectable, inject } from 'tsyringe';
-import { GetRecordingDto, RecordingResponseDto } from '@application/dtos/index.js';
+import { injectable } from 'tsyringe';
+import { GetRecordingDto, RecordingResponseDto, RecordingStatus } from '@application/dtos/index.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
-import { ErrorCode, RecordingStatus } from '@shared/constants/index.js';
+import { AppError, InternalServerError } from '@shared/errors/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**
@@ -48,10 +47,8 @@ export class GetRecordingUseCase {
       logger.error('Error getting recording', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to get recording: ${message}`,
-          500,
           { originalError: message }
         )
       );

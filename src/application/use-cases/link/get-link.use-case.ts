@@ -3,13 +3,12 @@
  * Retrieves link details by linkId
  */
 
-import { injectable, inject } from 'tsyringe';
-import { GetLinkDto, LinkResponseDto } from '@application/dtos/index.js';
-import { ILinkRepository } from '@domain/repositories/link.repository.interface.js';
-import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, LinkNotFoundError, LinkExpiredError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/index.js';
-import { logger } from '@shared/utils/index.js';
+import { injectable, inject } from "tsyringe";
+import { GetLinkDto, LinkResponseDto } from "@application/dtos/index.js";
+import { ILinkRepository } from "@domain/repositories/link.repository.interface.js";
+import { Result, success, failure } from "@shared/types/index.js";
+import { AppError, LinkNotFoundError, LinkExpiredError, InternalServerError } from "@shared/errors/index.js";
+import { logger } from "@shared/utils/index.js";
 
 /**
  * Use case for retrieving link details
@@ -17,9 +16,7 @@ import { logger } from '@shared/utils/index.js';
  */
 @injectable()
 export class GetLinkUseCase {
-  constructor(
-    @inject('ILinkRepository') private linkRepository: ILinkRepository
-  ) {}
+  constructor(@inject("ILinkRepository") private linkRepository: ILinkRepository) {}
 
   /**
    * Execute the use case
@@ -28,28 +25,28 @@ export class GetLinkUseCase {
    */
   async execute(dto: GetLinkDto): Promise<Result<LinkResponseDto, AppError>> {
     try {
-      logger.info('Getting link details', { linkId: dto.linkId });
+      logger.info("Getting link details", { linkId: dto.linkId });
 
       // Find link by linkId
       const link = await this.linkRepository.findByLinkId(dto.linkId);
       if (!link) {
-        logger.warn('Link not found', { linkId: dto.linkId });
+        logger.warn("Link not found", { linkId: dto.linkId });
         return failure(new LinkNotFoundError(dto.linkId));
       }
 
       // Check if link is expired
       if (link.isExpired()) {
-        logger.warn('Link has expired', {
+        logger.warn("Link has expired", {
           linkId: dto.linkId,
           expiresAt: link.expiresAt,
         });
-        return failure(new LinkExpiredError(dto.linkId));
+        return failure(new LinkExpiredError(dto.linkId, link.expiresAt ?? new Date()));
       }
 
-      logger.info('Link found', { linkId: link.linkId, room: link.room });
+      logger.info("Link found", { linkId: link.linkId, room: link.room });
 
       // Build full URL
-      const baseUrl = process.env.APP_URL || 'http://localhost:3000';
+      const baseUrl = process.env.APP_URL || "http://localhost:3000";
       const url = `${baseUrl}/join/${link.linkId}`;
 
       // Map to response DTO
@@ -76,17 +73,10 @@ export class GetLinkUseCase {
 
       return success(response);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      logger.error('Error getting link', { error: message, dto });
+      const message = error instanceof Error ? error.message : "Unknown error";
+      logger.error("Error getting link", { error: message, dto });
 
-      return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
-          `Failed to get link: ${message}`,
-          500,
-          { originalError: message }
-        )
-      );
+      return failure(new InternalServerError(`Failed to get link: ${message}`, { originalError: message }));
     }
   }
 }

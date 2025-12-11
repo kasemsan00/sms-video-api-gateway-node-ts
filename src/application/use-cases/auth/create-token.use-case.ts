@@ -7,8 +7,7 @@ import { injectable } from 'tsyringe';
 import jwt from 'jsonwebtoken';
 import { CreateTokenDto, CreateTokenResponseDto, TokenPayload } from '@application/dtos/index.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
-import { ErrorCode } from '@shared/constants/index.js';
+import { AppError, InternalServerError } from '@shared/errors/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**
@@ -41,7 +40,7 @@ export class CreateTokenUseCase {
 
       // Calculate expiration time
       const now = Math.floor(Date.now() / 1000);
-      const expiresIn = this.parseExpiresIn(dto.expiresIn);
+      const expiresIn = this.parseExpiresIn(dto.expiresIn ?? '24h');
       const exp = now + expiresIn;
 
       // Create token payload
@@ -52,9 +51,9 @@ export class CreateTokenUseCase {
         isAdmin: dto.isAdmin,
       };
 
-      // Sign the token
+      // Sign the token - convert seconds to string format for jwt.sign
       const token = jwt.sign(payload, this.jwtSecret, {
-        expiresIn: dto.expiresIn,
+        expiresIn: expiresIn, // jwt.sign accepts number (seconds) or string
       });
 
       // Decode to get full payload with iat and exp
@@ -78,10 +77,8 @@ export class CreateTokenUseCase {
       logger.error('Error creating token', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to create token: ${message}`,
-          500,
           { originalError: message }
         )
       );
@@ -99,8 +96,8 @@ export class CreateTokenUseCase {
       return 24 * 60 * 60;
     }
 
-    const value = parseInt(match[1], 10);
-    const unit = match[2];
+    const value = parseInt(match[1] ?? '0', 10);
+    const unit = match[2] ?? 'h';
 
     switch (unit) {
       case 's':

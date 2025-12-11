@@ -7,10 +7,9 @@ import { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { MySqlConnection } from './mysql-connection.js';
 import { QueryBuilder } from './query-builder.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
-import { ErrorCode } from '@shared/constants/error-codes.constant.js';
-import { logger } from '@shared/utils/logger.util.js';
-import { PaginatedResult, PaginationParams } from '@shared/types/pagination.type.js';
+import { AppError, DatabaseError } from '@shared/errors/index.js';
+import { log as logger } from '@shared/utils/index.js';
+import { PaginatedResult, PaginationParams, createPaginatedResult } from '@shared/types/pagination.type.js';
 
 /**
  * Base Repository
@@ -64,10 +63,8 @@ export abstract class BaseRepository<T> {
       logger.error('Query execution failed', { error: message, sql });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Query execution failed: ${message}`,
-          500,
           { sql, originalError: message }
         )
       );
@@ -94,10 +91,8 @@ export abstract class BaseRepository<T> {
       logger.error('Insert execution failed', { error: message, sql });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Insert execution failed: ${message}`,
-          500,
           { sql, originalError: message }
         )
       );
@@ -124,10 +119,8 @@ export abstract class BaseRepository<T> {
       logger.error('Update execution failed', { error: message, sql });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Update execution failed: ${message}`,
-          500,
           { sql, originalError: message }
         )
       );
@@ -154,10 +147,8 @@ export abstract class BaseRepository<T> {
       logger.error('Delete execution failed', { error: message, sql });
 
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Delete execution failed: ${message}`,
-          500,
           { sql, originalError: message }
         )
       );
@@ -181,7 +172,12 @@ export abstract class BaseRepository<T> {
       return success(null);
     }
 
-    const entityResult = this.mapToDomain(result.value[0]);
+    const firstRow = result.value[0];
+    if (!firstRow) {
+      return success(null);
+    }
+
+    const entityResult = this.mapToDomain(firstRow);
     if (entityResult.isFailure) {
       return failure(entityResult.error);
     }
@@ -270,17 +266,8 @@ export abstract class BaseRepository<T> {
       items.push(entityResult.value);
     }
 
-    const totalPages = Math.ceil(total / limit);
 
-    return success({
-      items,
-      total,
-      page,
-      limit,
-      totalPages,
-      hasNext: page < totalPages,
-      hasPrevious: page > 1,
-    });
+    return success(createPaginatedResult(items, total, { page, limit }));
   }
 
   /**

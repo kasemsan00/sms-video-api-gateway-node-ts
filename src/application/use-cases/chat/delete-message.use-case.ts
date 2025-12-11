@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { DeleteMessageDto, MessageResponseDto } from '@application/dtos/index.js';
 import { IMessageRepository } from '@domain/repositories/message.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, MessageNotFoundError } from '@shared/errors/index.js';
+import { AppError, MessageNotFoundError, InsufficientPermissionsError, BusinessRuleViolationError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -48,15 +48,7 @@ export class DeleteMessageUseCase {
           ownerIdentity: message.identity,
         });
         return failure(
-          new AppError(
-            ErrorCode.INSUFFICIENT_PERMISSIONS,
-            'You can only delete your own messages',
-            403,
-            {
-              messageId: dto.messageId,
-              identity: dto.identity,
-            }
-          )
+          new InsufficientPermissionsError('message.delete')
         );
       }
 
@@ -68,10 +60,8 @@ export class DeleteMessageUseCase {
           error: deleteResult.error,
         });
         return failure(
-          new AppError(
-            ErrorCode.BUSINESS_RULE_VIOLATION,
+          new BusinessRuleViolationError(
             deleteResult.error.message,
-            400,
             { details: deleteResult.error }
           )
         );
@@ -103,10 +93,8 @@ export class DeleteMessageUseCase {
       logger.error('Error deleting message', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to delete message: ${message}`,
-          500,
           { originalError: message }
         )
       );

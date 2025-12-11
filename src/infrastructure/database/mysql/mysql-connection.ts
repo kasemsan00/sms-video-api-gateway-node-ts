@@ -5,7 +5,7 @@
 
 import mysql, { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { getDatabaseConfig } from '@config/database.config.js';
-import { logger } from '@shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
 import { AppError } from '@shared/errors/base.error.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';

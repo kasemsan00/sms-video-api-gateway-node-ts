@@ -7,7 +7,7 @@ import { injectable } from 'tsyringe';
 import jwt from 'jsonwebtoken';
 import { RefreshTokenDto, CreateTokenResponseDto, TokenPayload } from '@application/dtos/index.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, InvalidTokenError, TokenExpiredError } from '@shared/errors/index.js';
+import { AppError, InvalidTokenError, TokenExpiredError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -59,12 +59,7 @@ export class RefreshTokenUseCase {
               timeSinceExpiry,
             });
             return failure(
-              new AppError(
-                ErrorCode.TOKEN_EXPIRED,
-                'Token has expired and cannot be refreshed',
-                401,
-                { expiredAt: new Date(expiredAt * 1000) }
-              )
+              new TokenExpiredError(new Date(expiredAt * 1000))
             );
           }
 
@@ -115,10 +110,8 @@ export class RefreshTokenUseCase {
       logger.error('Error refreshing token', { error: message });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to refresh token: ${message}`,
-          500,
           { originalError: message }
         )
       );

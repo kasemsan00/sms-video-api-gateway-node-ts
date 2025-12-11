@@ -8,7 +8,7 @@ import { BaseNamespace, TypedSocket } from './base.namespace.js';
 import { ChatService } from '@/application/services/chat.service.js';
 import { UserService } from '@/application/services/user.service.js';
 import { LinkService } from '@/application/services/link.service.js';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export class RoomNamespace extends BaseNamespace {
   private chatService: ChatService;

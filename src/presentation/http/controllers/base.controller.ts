@@ -7,7 +7,7 @@ import { Request, Response } from 'express';
 import { Result } from '@/shared/types/result.type.js';
 import { AppError } from '@/shared/errors/base.error.js';
 import { successResponse, errorResponse } from '@/shared/types/api-response.type.js';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log } from '@/shared/utils/logger.util.js';
 
 export abstract class BaseController {
   /**
@@ -28,7 +28,7 @@ export abstract class BaseController {
         this.sendError(res, result.error);
       }
     } catch (error) {
-      logger.error('Unexpected error in controller', {
+      log.error('Unexpected error in controller', {
         error,
         path: req.path,
         method: req.method,

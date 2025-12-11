@@ -4,12 +4,14 @@
  */
 
 import { injectable, inject } from 'tsyringe';
+import { EncodingOptionsPreset } from 'livekit-server-sdk';
 import { StartRecordingDto, StartRecordingResponseDto } from '@application/dtos/index.js';
 import { IRoomRepository } from '@domain/repositories/room.repository.interface.js';
 import { LiveKitAdapter } from '@infrastructure/adapters/livekit/livekit.adapter.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError } from '@shared/errors/index.js';
-import { ErrorCode, RecordingStatus } from '@shared/constants/index.js';
+import { AppError, RoomNotFoundError, BusinessRuleViolationError, InternalServerError } from '@shared/errors/index.js';
+import { ErrorCode } from '@shared/constants/index.js';
+import { RecordingStatus } from '@application/dtos/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**
@@ -46,20 +48,30 @@ export class StartRecordingUseCase {
           existingRecordId: room.recordId,
         });
         return failure(
-          new AppError(
-            ErrorCode.BUSINESS_RULE_VIOLATION,
+          new BusinessRuleViolationError(
             'Room is already being recorded',
-            400,
             { recordId: room.recordId }
           )
         );
+      }
+
+      // Map preset string to EncodingOptionsPreset enum
+      let preset: EncodingOptionsPreset | undefined;
+      if (dto.preset) {
+        const presetMap: Record<string, EncodingOptionsPreset> = {
+          'H264_720P_30': EncodingOptionsPreset.H264_720P_30,
+          'H264_1080P_30': EncodingOptionsPreset.H264_1080P_30,
+          'H264_720P_60': EncodingOptionsPreset.H264_720P_60,
+          'H264_1080P_60': EncodingOptionsPreset.H264_1080P_60,
+        };
+        preset = presetMap[dto.preset];
       }
 
       // Start recording via LiveKit
       const recordingResult = await this.livekitAdapter.startRecording({
         roomName: dto.room,
         fileOutputPrefix: dto.filePrefix || `recordings/${dto.room}`,
-        preset: dto.preset,
+        preset,
       });
 
       if (recordingResult.isFailure) {
@@ -95,10 +107,8 @@ export class StartRecordingUseCase {
       logger.error('Error starting recording', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to start recording: ${message}`,
-          500,
           { originalError: message }
         )
       );

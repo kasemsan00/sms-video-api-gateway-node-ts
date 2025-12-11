@@ -8,7 +8,7 @@ import { BaseRepository } from '../base-repository.js';
 import { Service } from '@domain/entities/service.entity.js';
 import { IServiceRepository } from '@domain/repositories/service.repository.interface.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
+import { AppError, DatabaseError, NotFoundError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
@@ -36,10 +36,8 @@ export class MySqlServiceRepository extends BaseRepository<Service> implements I
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Failed to map service from database: ${message}`,
-          500,
           { row, originalError: message }
         )
       );
@@ -145,11 +143,7 @@ export class MySqlServiceRepository extends BaseRepository<Service> implements I
     // Fetch the created service
     const createdService = await this.findById(insertId);
     if (!createdService) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch created service',
-        500
-      );
+      throw new DatabaseError('Failed to fetch created service');
     }
 
     return createdService;
@@ -170,21 +164,13 @@ export class MySqlServiceRepository extends BaseRepository<Service> implements I
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.SERVICE_NOT_FOUND,
-        `Service with ID ${service.id} not found`,
-        404
-      );
+      throw new NotFoundError('Service', service.id.toString());
     }
 
     // Fetch the updated service
     const updatedService = await this.findById(service.id);
     if (!updatedService) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch updated service',
-        500
-      );
+      throw new DatabaseError('Failed to fetch updated service');
     }
 
     return updatedService;
@@ -204,11 +190,7 @@ export class MySqlServiceRepository extends BaseRepository<Service> implements I
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.SERVICE_NOT_FOUND,
-        `Service with ID ${id} not found`,
-        404
-      );
+      throw new NotFoundError('Service', id.toString());
     }
   }
 
@@ -230,11 +212,7 @@ export class MySqlServiceRepository extends BaseRepository<Service> implements I
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.SERVICE_NOT_FOUND,
-        `Service with ID ${id} not found`,
-        404
-      );
+      throw new NotFoundError('Service', id.toString());
     }
   }
 
@@ -256,11 +234,7 @@ export class MySqlServiceRepository extends BaseRepository<Service> implements I
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.SERVICE_NOT_FOUND,
-        `Service with ID ${id} not found`,
-        404
-      );
+      throw new NotFoundError('Service', id.toString());
     }
   }
 

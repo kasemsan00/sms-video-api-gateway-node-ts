@@ -9,7 +9,7 @@ import { IMessageRepository } from '@domain/repositories/message.repository.inte
 import { IRoomRepository } from '@domain/repositories/room.repository.interface.js';
 import { Message } from '@domain/entities/message.entity.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError } from '@shared/errors/index.js';
+import { AppError, RoomNotFoundError, ValidationError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -56,10 +56,8 @@ export class SendMessageUseCase {
           error: messageResult.error,
         });
         return failure(
-          new AppError(
-            ErrorCode.VALIDATION_ERROR,
+          new ValidationError(
             messageResult.error.message,
-            400,
             { details: messageResult.error }
           )
         );
@@ -112,10 +110,8 @@ export class SendMessageUseCase {
       logger.error('Error sending message', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to send message: ${message}`,
-          500,
           { originalError: message }
         )
       );

@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { ExtendRoomExpiryDto, RoomResponseDto } from '@application/dtos/index.js';
 import { IRoomRepository } from '@domain/repositories/room.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError } from '@shared/errors/index.js';
+import { AppError, RoomNotFoundError, BusinessRuleViolationError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -48,10 +48,8 @@ export class ExtendRoomExpiryUseCase {
           error: extendResult.error,
         });
         return failure(
-          new AppError(
-            ErrorCode.BUSINESS_RULE_VIOLATION,
+          new BusinessRuleViolationError(
             extendResult.error.message,
-            400,
             { details: extendResult.error }
           )
         );
@@ -90,10 +88,8 @@ export class ExtendRoomExpiryUseCase {
       logger.error('Error extending room expiry', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to extend room expiry: ${message}`,
-          500,
           { originalError: message }
         )
       );

@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { VerifyLinkDto, LinkResponseDto } from '@application/dtos/index.js';
 import { ILinkRepository } from '@domain/repositories/link.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, LinkNotFoundError } from '@shared/errors/index.js';
+import { AppError, LinkNotFoundError, BusinessRuleViolationError, InvalidInputError, InvalidCredentialsError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -45,10 +45,8 @@ export class VerifyLinkUseCase {
           error: canUseResult.error,
         });
         return failure(
-          new AppError(
-            ErrorCode.BUSINESS_RULE_VIOLATION,
+          new BusinessRuleViolationError(
             canUseResult.error.message,
-            400,
             { details: canUseResult.error }
           )
         );
@@ -61,11 +59,7 @@ export class VerifyLinkUseCase {
             linkId: dto.linkId,
           });
           return failure(
-            new AppError(
-              ErrorCode.INVALID_INPUT,
-              'Password is required for this link',
-              400
-            )
+            new InvalidInputError('password', 'Password is required for this link')
           );
         }
 
@@ -74,11 +68,7 @@ export class VerifyLinkUseCase {
             linkId: dto.linkId,
           });
           return failure(
-            new AppError(
-              ErrorCode.INVALID_CREDENTIALS,
-              'Invalid password',
-              401
-            )
+            new InvalidCredentialsError('Invalid password')
           );
         }
       }
@@ -120,10 +110,8 @@ export class VerifyLinkUseCase {
       logger.error('Error verifying link', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to verify link: ${message}`,
-          500,
           { originalError: message }
         )
       );

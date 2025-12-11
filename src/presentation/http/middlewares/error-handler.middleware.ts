@@ -6,7 +6,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '@/shared/errors/base.error.js';
 import { errorResponse } from '@/shared/types/api-response.type.js';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export const errorHandler = (
   error: Error,

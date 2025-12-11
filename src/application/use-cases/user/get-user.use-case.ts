@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { GetUserDto, UserResponseDto } from '@application/dtos/index.js';
 import { IUserRepository } from '@domain/repositories/user.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, UserNotFoundError } from '@shared/errors/index.js';
+import { AppError, UserNotFoundError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -67,10 +67,8 @@ export class GetUserUseCase {
       logger.error('Error getting user', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to get user: ${message}`,
-          500,
           { originalError: message }
         )
       );

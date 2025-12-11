@@ -9,7 +9,7 @@ import { corsMiddleware } from './middlewares/cors.middleware.js';
 import { requestLogger } from './middlewares/request-logger.middleware.js';
 import { errorHandler } from './middlewares/error-handler.middleware.js';
 import routes from './routes/index.js';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export function createExpressApp(): Express {
   const app = express();

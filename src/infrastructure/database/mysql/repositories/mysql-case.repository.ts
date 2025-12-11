@@ -9,7 +9,7 @@ import { Case } from '@domain/entities/case.entity.js';
 import { ICaseRepository } from '@domain/repositories/case.repository.interface.js';
 import { PaginatedResult, PaginationParams } from '@shared/types/pagination.type.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
+import { AppError, DatabaseError, CaseNotFoundError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
@@ -39,10 +39,8 @@ export class MySqlCaseRepository extends BaseRepository<Case> implements ICaseRe
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Failed to map case from database: ${message}`,
-          500,
           { row, originalError: message }
         )
       );
@@ -103,7 +101,7 @@ export class MySqlCaseRepository extends BaseRepository<Case> implements ICaseRe
       throw result.error;
     }
 
-    return result.value.length > 0 ? result.value[0] : null;
+    return result.value.length > 0 ? (result.value[0] ?? null) : null;
   }
 
   /**
@@ -151,11 +149,7 @@ export class MySqlCaseRepository extends BaseRepository<Case> implements ICaseRe
     // Fetch the created case
     const createdCase = await this.findById(insertId);
     if (!createdCase) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch created case',
-        500
-      );
+      throw new DatabaseError('Failed to fetch created case');
     }
 
     return createdCase;
@@ -176,21 +170,13 @@ export class MySqlCaseRepository extends BaseRepository<Case> implements ICaseRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.CASE_NOT_FOUND,
-        `Case with ID ${caseEntity.id} not found`,
-        404
-      );
+      throw new CaseNotFoundError(caseEntity.id);
     }
 
     // Fetch the updated case
     const updatedCase = await this.findById(caseEntity.id);
     if (!updatedCase) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch updated case',
-        500
-      );
+      throw new DatabaseError('Failed to fetch updated case');
     }
 
     return updatedCase;
@@ -210,11 +196,7 @@ export class MySqlCaseRepository extends BaseRepository<Case> implements ICaseRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.CASE_NOT_FOUND,
-        `Case with ID ${id} not found`,
-        404
-      );
+      throw new CaseNotFoundError(id);
     }
   }
 
@@ -236,11 +218,7 @@ export class MySqlCaseRepository extends BaseRepository<Case> implements ICaseRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.CASE_NOT_FOUND,
-        `Case with ID ${id} not found`,
-        404
-      );
+      throw new CaseNotFoundError(id);
     }
   }
 

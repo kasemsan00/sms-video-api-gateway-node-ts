@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { MarkMessagesReadDto, RoomResponseDto } from '@application/dtos/index.js';
 import { IRoomRepository } from '@domain/repositories/room.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError } from '@shared/errors/index.js';
+import { AppError, RoomNotFoundError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -72,10 +72,8 @@ export class MarkMessagesReadUseCase {
       logger.error('Error marking messages as read', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to mark messages as read: ${message}`,
-          500,
           { originalError: message }
         )
       );

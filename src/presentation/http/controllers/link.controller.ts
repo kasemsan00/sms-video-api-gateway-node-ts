@@ -45,7 +45,7 @@ export class LinkController extends BaseController {
    */
   getLink = async (req: Request, res: Response): Promise<void> => {
     const dto: GetLinkDto = {
-      linkId: req.params.linkId,
+      linkId: req.params.linkId!,
     };
 
     await this.executeUseCase(
@@ -61,7 +61,7 @@ export class LinkController extends BaseController {
    */
   verifyLink = async (req: Request, res: Response): Promise<void> => {
     const dto: VerifyLinkDto = {
-      linkId: req.params.linkId,
+      linkId: req.params.linkId!,
       password: req.body.password,
     };
 
@@ -78,7 +78,7 @@ export class LinkController extends BaseController {
    */
   updateLocation = async (req: Request, res: Response): Promise<void> => {
     const dto: UpdateLinkLocationDto = {
-      linkId: req.params.linkId,
+      linkId: req.params.linkId!,
       latitude: req.body.latitude,
       longitude: req.body.longitude,
     };
@@ -96,7 +96,7 @@ export class LinkController extends BaseController {
    */
   markUsed = async (req: Request, res: Response): Promise<void> => {
     const dto: MarkLinkUsedDto = {
-      linkId: req.params.linkId,
+      linkId: req.params.linkId!,
     };
 
     await this.executeUseCase(
@@ -112,7 +112,7 @@ export class LinkController extends BaseController {
    */
   listLinks = async (req: Request, res: Response): Promise<void> => {
     const dto: ListLinksDto = {
-      room: req.params.roomName,
+      room: req.params.roomName!,
       linkType: req.query.linkType as any,
       page: req.query.page ? parseInt(req.query.page as string) : 1,
       limit: req.query.limit ? parseInt(req.query.limit as string) : 20,

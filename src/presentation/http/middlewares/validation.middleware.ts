@@ -17,7 +17,7 @@ export interface ValidationTarget {
  * Validate request data against Zod schemas
  */
 export const validate = (schemas: ValidationTarget) => {
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
     try {
       // Validate body
       if (schemas.body) {
@@ -26,12 +26,12 @@ export const validate = (schemas: ValidationTarget) => {
 
       // Validate query
       if (schemas.query) {
-        req.query = await schemas.query.parseAsync(req.query);
+        req.query = (await schemas.query.parseAsync(req.query)) as typeof req.query;
       }
 
       // Validate params
       if (schemas.params) {
-        req.params = await schemas.params.parseAsync(req.params);
+        req.params = (await schemas.params.parseAsync(req.params)) as typeof req.params;
       }
 
       next();
@@ -41,7 +41,7 @@ export const validate = (schemas: ValidationTarget) => {
           'VALIDATION_ERROR',
           'Validation failed',
           400,
-          error.errors.map((e) => ({
+          error.issues.map((e) => ({
             path: e.path.join('.'),
             message: e.message,
             code: e.code,

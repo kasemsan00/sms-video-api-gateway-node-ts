@@ -43,8 +43,14 @@ export class ChatController extends BaseController {
    * GET /api/chat/messages/:messageId
    */
   getMessage = async (req: Request, res: Response): Promise<void> => {
+    const messageId = req.params.messageId;
+    if (!messageId) {
+      this.sendError(res, { message: 'Message ID is required' }, 400);
+      return;
+    }
+
     const dto: GetMessageDto = {
-      messageId: parseInt(req.params.messageId),
+      messageId: parseInt(messageId),
     };
 
     await this.executeUseCase(
@@ -59,8 +65,14 @@ export class ChatController extends BaseController {
    * GET /api/rooms/:roomName/messages
    */
   getMessages = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: GetMessagesDto = {
-      room: req.params.roomName,
+      room: roomName,
       page: req.query.page ? parseInt(req.query.page as string) : 1,
       limit: req.query.limit ? parseInt(req.query.limit as string) : 50,
     };
@@ -77,9 +89,15 @@ export class ChatController extends BaseController {
    * DELETE /api/chat/messages/:messageId
    */
   deleteMessage = async (req: Request, res: Response): Promise<void> => {
+    const messageId = req.params.messageId;
+    if (!messageId) {
+      this.sendError(res, { message: 'Message ID is required' }, 400);
+      return;
+    }
+
     const dto: DeleteMessageDto = {
-      messageId: parseInt(req.params.messageId),
-      identity: req.body.identity || req.user?.identity,
+      messageId: parseInt(messageId),
+      identity: req.body.identity || req.user?.identity || null,
     };
 
     await this.executeUseCase(
@@ -100,8 +118,14 @@ export class ChatController extends BaseController {
    * POST /api/rooms/:roomName/messages/read
    */
   markAsRead = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: MarkMessagesReadDto = {
-      room: req.params.roomName,
+      room: roomName,
     };
 
     await this.executeUseCase(

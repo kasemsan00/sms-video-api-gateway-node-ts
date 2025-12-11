@@ -4,7 +4,7 @@
  */
 
 import mysql, { Pool, PoolOptions, RowDataPacket } from 'mysql2/promise';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export class DatabaseConnection {
   private static instance: DatabaseConnection;

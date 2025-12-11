@@ -10,7 +10,7 @@ import { IRoomRepository } from '@domain/repositories/room.repository.interface.
 import { Link } from '@domain/entities/link.entity.js';
 import { SmsAdapter } from '@infrastructure/adapters/sms/sms.adapter.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError } from '@shared/errors/index.js';
+import { AppError, RoomNotFoundError, InternalServerError, ValidationError, BusinessRuleViolationError } from '@shared/errors/index.js';
 import { ErrorCode, LinkType } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -67,10 +67,8 @@ export class CreateLinkUseCase {
       if (linkResult.isFailure) {
         logger.error('Failed to create link entity', { error: linkResult.error });
         return failure(
-          new AppError(
-            ErrorCode.VALIDATION_ERROR,
+          new ValidationError(
             linkResult.error.message,
-            400,
             { details: linkResult.error }
           )
         );
@@ -151,10 +149,8 @@ export class CreateLinkUseCase {
       logger.error('Error creating link', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to create link: ${message}`,
-          500,
           { originalError: message }
         )
       );

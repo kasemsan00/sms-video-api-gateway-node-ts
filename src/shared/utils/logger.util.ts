@@ -199,4 +199,5 @@ export const createContextLogger = (context: string): Logger => {
 /**
  * Export winston logger for backward compatibility
  */
+export { logger };
 export default logger;

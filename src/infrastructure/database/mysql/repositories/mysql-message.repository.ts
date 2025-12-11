@@ -9,7 +9,7 @@ import { Message } from '@domain/entities/message.entity.js';
 import { IMessageRepository } from '@domain/repositories/message.repository.interface.js';
 import { PaginatedResult, PaginationParams } from '@shared/types/pagination.type.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
+import { AppError, DatabaseError, MessageNotFoundError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
@@ -38,10 +38,8 @@ export class MySqlMessageRepository extends BaseRepository<Message> implements I
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Failed to map message from database: ${message}`,
-          500,
           { row, originalError: message }
         )
       );
@@ -160,11 +158,7 @@ export class MySqlMessageRepository extends BaseRepository<Message> implements I
     // Fetch the created message
     const createdMessage = await this.findById(insertId);
     if (!createdMessage) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch created message',
-        500
-      );
+      throw new DatabaseError('Failed to fetch created message');
     }
 
     return createdMessage;
@@ -185,21 +179,13 @@ export class MySqlMessageRepository extends BaseRepository<Message> implements I
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.MESSAGE_NOT_FOUND,
-        `Message with ID ${message.id} not found`,
-        404
-      );
+      throw new MessageNotFoundError(message.id);
     }
 
     // Fetch the updated message
     const updatedMessage = await this.findById(message.id);
     if (!updatedMessage) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch updated message',
-        500
-      );
+      throw new DatabaseError('Failed to fetch updated message');
     }
 
     return updatedMessage;
@@ -219,11 +205,7 @@ export class MySqlMessageRepository extends BaseRepository<Message> implements I
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.MESSAGE_NOT_FOUND,
-        `Message with ID ${id} not found`,
-        404
-      );
+      throw new MessageNotFoundError(id);
     }
   }
 
@@ -259,11 +241,7 @@ export class MySqlMessageRepository extends BaseRepository<Message> implements I
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.MESSAGE_NOT_FOUND,
-        `Message with ID ${id} not found`,
-        404
-      );
+      throw new MessageNotFoundError(id);
     }
   }
 

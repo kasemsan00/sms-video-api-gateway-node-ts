@@ -9,7 +9,7 @@ import { IRoomRepository } from '@domain/repositories/room.repository.interface.
 import { Room } from '@domain/entities/room.entity.js';
 import { LiveKitAdapter } from '@infrastructure/adapters/livekit/livekit.adapter.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomAlreadyExistsError } from '@shared/errors/index.js';
+import { AppError, RoomAlreadyExistsError, ValidationError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -47,10 +47,8 @@ export class CreateRoomUseCase {
       if (roomResult.isFailure) {
         logger.error('Failed to create room entity', { error: roomResult.error });
         return failure(
-          new AppError(
-            ErrorCode.VALIDATION_ERROR,
+          new ValidationError(
             roomResult.error.message,
-            400,
             { details: roomResult.error }
           )
         );
@@ -119,10 +117,8 @@ export class CreateRoomUseCase {
       logger.error('Error creating room', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to create room: ${message}`,
-          500,
           { originalError: message }
         )
       );

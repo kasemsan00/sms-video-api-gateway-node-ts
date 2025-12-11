@@ -45,7 +45,7 @@ export class RecordService {
   /**
    * Stop a recording
    */
-  async stopRecording(dto: StopRecordingDto): Promise<Result<void, AppError>> {
+  async stopRecording(dto: StopRecordingDto): Promise<Result<RecordingResponseDto, AppError>> {
     return this.stopRecordingUseCase.execute(dto);
   }
 

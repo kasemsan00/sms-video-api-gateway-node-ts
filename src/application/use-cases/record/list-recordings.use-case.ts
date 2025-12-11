@@ -3,10 +3,10 @@
  * Retrieves all recordings for a room with pagination
  */
 
-import { injectable, inject } from 'tsyringe';
+import { injectable } from 'tsyringe';
 import { ListRecordingsDto, ListRecordingsResponseDto, RecordingResponseDto } from '@application/dtos/index.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
+import { AppError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -64,10 +64,8 @@ export class ListRecordingsUseCase {
       logger.error('Error listing recordings', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to list recordings: ${message}`,
-          500,
           { originalError: message }
         )
       );

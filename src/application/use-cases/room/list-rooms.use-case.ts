@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { ListRoomsDto, ListRoomsResponseDto, RoomResponseDto } from '@application/dtos/index.js';
 import { IRoomRepository } from '@domain/repositories/room.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
+import { AppError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -40,7 +40,7 @@ export class ListRoomsUseCase {
       const paginatedResult = await this.roomRepository.findAll(paginationParams);
 
       // Map rooms to response DTOs
-      const items: RoomResponseDto[] = paginatedResult.items.map((room) => ({
+      const items: RoomResponseDto[] = paginatedResult.data.map((room) => ({
         id: room.id,
         name: room.name,
         status: room.status,
@@ -59,12 +59,12 @@ export class ListRoomsUseCase {
 
       const response: ListRoomsResponseDto = {
         items,
-        total: paginatedResult.total,
-        page: paginatedResult.page,
-        limit: paginatedResult.limit,
-        totalPages: Math.ceil(paginatedResult.total / paginatedResult.limit),
-        hasNext: paginatedResult.page < Math.ceil(paginatedResult.total / paginatedResult.limit),
-        hasPrevious: paginatedResult.page > 1,
+        total: paginatedResult.pagination.total,
+        page: paginatedResult.pagination.page,
+        limit: paginatedResult.pagination.limit,
+        totalPages: paginatedResult.pagination.totalPages,
+        hasNext: paginatedResult.pagination.hasNextPage,
+        hasPrevious: paginatedResult.pagination.hasPrevPage,
       };
 
       logger.info('Rooms listed successfully', {
@@ -79,10 +79,8 @@ export class ListRoomsUseCase {
       logger.error('Error listing rooms', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to list rooms: ${message}`,
-          500,
           { originalError: message }
         )
       );

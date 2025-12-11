@@ -4,7 +4,7 @@
  */
 
 import { BaseNamespace, TypedSocket } from './base.namespace.js';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export class MobileNamespace extends BaseNamespace {
   protected onConnection(socket: TypedSocket): void {

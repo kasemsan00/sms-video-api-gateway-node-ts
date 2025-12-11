@@ -6,7 +6,7 @@
 import "reflect-metadata";
 import { config } from "dotenv";
 import { createServer } from "./presentation/server.js";
-import { logger } from "./shared/utils/logger.util.js";
+import logger from "./shared/utils/logger.util.js";
 import { DatabaseConnection } from "./infrastructure/database/mysql/connection.js";
 
 // Load environment variables

@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { GetMessagesDto, GetMessagesResponseDto, MessageResponseDto } from '@application/dtos/index.js';
 import { IMessageRepository } from '@domain/repositories/message.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
+import { AppError, RoomNotFoundError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -48,12 +48,12 @@ export class GetMessagesUseCase {
 
       logger.info('Messages retrieved successfully', {
         room: dto.room,
-        total: paginatedResult.total,
-        page: paginatedResult.page,
+        total: paginatedResult.pagination.total,
+        page: paginatedResult.pagination.page,
       });
 
       // Map to response DTOs
-      const items: MessageResponseDto[] = paginatedResult.items.map((message) => ({
+      const items: MessageResponseDto[] = paginatedResult.data.map((message) => ({
         id: message.id,
         room: message.room,
         identity: message.identity,
@@ -66,12 +66,12 @@ export class GetMessagesUseCase {
 
       const response: GetMessagesResponseDto = {
         items,
-        total: paginatedResult.total,
-        page: paginatedResult.page,
-        limit: paginatedResult.limit,
-        totalPages: Math.ceil(paginatedResult.total / paginatedResult.limit),
-        hasNext: paginatedResult.page < Math.ceil(paginatedResult.total / paginatedResult.limit),
-        hasPrevious: paginatedResult.page > 1,
+        total: paginatedResult.pagination.total,
+        page: paginatedResult.pagination.page,
+        limit: paginatedResult.pagination.limit,
+        totalPages: paginatedResult.pagination.totalPages,
+        hasNext: paginatedResult.pagination.hasNextPage,
+        hasPrevious: paginatedResult.pagination.hasPrevPage,
       };
 
       return success(response);
@@ -80,10 +80,8 @@ export class GetMessagesUseCase {
       logger.error('Error getting messages', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to get messages: ${message}`,
-          500,
           { originalError: message }
         )
       );

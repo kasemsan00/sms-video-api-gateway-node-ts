@@ -8,7 +8,7 @@ import { CloseRoomDto, RoomResponseDto } from '@application/dtos/index.js';
 import { IRoomRepository } from '@domain/repositories/room.repository.interface.js';
 import { LiveKitAdapter } from '@infrastructure/adapters/livekit/livekit.adapter.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError } from '@shared/errors/index.js';
+import { AppError, RoomNotFoundError, BusinessRuleViolationError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -47,10 +47,8 @@ export class CloseRoomUseCase {
           error: closeResult.error,
         });
         return failure(
-          new AppError(
-            ErrorCode.BUSINESS_RULE_VIOLATION,
+          new BusinessRuleViolationError(
             closeResult.error.message,
-            400,
             { details: closeResult.error }
           )
         );
@@ -103,10 +101,8 @@ export class CloseRoomUseCase {
       logger.error('Error closing room', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to close room: ${message}`,
-          500,
           { originalError: message }
         )
       );

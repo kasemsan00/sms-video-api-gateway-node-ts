@@ -11,7 +11,7 @@ import { RoomStatus } from '@shared/constants/room-status.constant.js';
 import { RoomType } from '@shared/constants/room-types.constant.js';
 import { PaginatedResult, PaginationParams } from '@shared/types/pagination.type.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
+import { AppError, DatabaseError, RoomNotFoundError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';
 
 @injectable()
@@ -46,10 +46,8 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       return failure(
-        new AppError(
-          ErrorCode.DATABASE_ERROR,
+        new DatabaseError(
           `Failed to map room from database: ${message}`,
-          500,
           { row, originalError: message }
         )
       );
@@ -151,7 +149,7 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
    * Check if room exists by name
    */
   async exists(name: string): Promise<boolean> {
-    const result = await this.exists({ room: name });
+    const result = await super.exists({ room: name });
 
     if (result.isFailure) {
       throw result.error;
@@ -179,11 +177,7 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     // Fetch the created room
     const createdRoom = await this.findById(insertId);
     if (!createdRoom) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch created room',
-        500
-      );
+      throw new DatabaseError('Failed to fetch created room');
     }
 
     return createdRoom;
@@ -204,21 +198,13 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.ROOM_NOT_FOUND,
-        `Room with ID ${room.id} not found`,
-        404
-      );
+      throw new RoomNotFoundError(room.id.toString());
     }
 
     // Fetch the updated room
     const updatedRoom = await this.findById(room.id);
     if (!updatedRoom) {
-      throw new AppError(
-        ErrorCode.DATABASE_ERROR,
-        'Failed to fetch updated room',
-        500
-      );
+      throw new DatabaseError('Failed to fetch updated room');
     }
 
     return updatedRoom;
@@ -238,11 +224,7 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.ROOM_NOT_FOUND,
-        `Room with ID ${id} not found`,
-        404
-      );
+      throw new RoomNotFoundError(id.toString());
     }
   }
 
@@ -264,11 +246,7 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.ROOM_NOT_FOUND,
-        `Room with ID ${id} not found`,
-        404
-      );
+      throw new RoomNotFoundError(id.toString());
     }
   }
 
@@ -290,11 +268,7 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.ROOM_NOT_FOUND,
-        `Room with ID ${id} not found`,
-        404
-      );
+      throw new RoomNotFoundError(id.toString());
     }
   }
 
@@ -316,11 +290,7 @@ export class MySqlRoomRepository extends BaseRepository<Room> implements IRoomRe
     }
 
     if (result.value === 0) {
-      throw new AppError(
-        ErrorCode.ROOM_NOT_FOUND,
-        `Room with ID ${id} not found`,
-        404
-      );
+      throw new RoomNotFoundError(id.toString());
     }
   }
 

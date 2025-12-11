@@ -1,0 +1,368 @@
+src/application/services/chat.service.ts(55,5): error TS2322: Type 'Result<MessageResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+  Type 'Success<MessageResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+    Type 'Success<MessageResponseDto, AppError>' is not assignable to type 'Success<void, AppError>'.
+      Type 'MessageResponseDto' is not assignable to type 'void'.
+src/application/services/chat.service.ts(62,5): error TS2322: Type 'Result<RoomResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+  Type 'Success<RoomResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+    Type 'Success<RoomResponseDto, AppError>' is not assignable to type 'Success<void, AppError>'.
+      Type 'RoomResponseDto' is not assignable to type 'void'.
+src/application/services/link.service.ts(68,5): error TS2322: Type 'Result<LinkResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+  Type 'Success<LinkResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+    Type 'Success<LinkResponseDto, AppError>' is not assignable to type 'Success<void, AppError>'.
+      Type 'LinkResponseDto' is not assignable to type 'void'.
+src/application/services/record.service.ts(49,5): error TS2322: Type 'Result<RecordingResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+  Type 'Success<RecordingResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+    Type 'Success<RecordingResponseDto, AppError>' is not assignable to type 'Success<void, AppError>'.
+      Type 'RecordingResponseDto' is not assignable to type 'void'.
+src/application/services/room.service.ts(54,5): error TS2322: Type 'Result<RoomResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+  Type 'Success<RoomResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+    Type 'Success<RoomResponseDto, AppError>' is not assignable to type 'Success<void, AppError>'.
+      Type 'RoomResponseDto' is not assignable to type 'void'.
+src/application/services/user.service.ts(58,5): error TS2322: Type 'Result<UserResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+  Type 'Success<UserResponseDto, AppError>' is not assignable to type 'Result<void, AppError>'.
+    Type 'Success<UserResponseDto, AppError>' is not assignable to type 'Success<void, AppError>'.
+      Type 'UserResponseDto' is not assignable to type 'void'.
+src/application/use-cases/auth/create-token.use-case.ts(56,25): error TS2769: No overload matches this call.
+  Overload 1 of 5, '(payload: string | object | Buffer<ArrayBufferLike>, secretOrPrivateKey: null, options?: (SignOptions & { algorithm: "none"; }) | undefined): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'null'.
+  Overload 2 of 5, '(payload: string | object | Buffer<ArrayBufferLike>, secretOrPrivateKey: Buffer<ArrayBufferLike> | Secret | PrivateKeyInput | JsonWebKeyInput, options?: SignOptions | undefined): string', gave the following error.
+    Type 'string' is not assignable to type 'number | StringValue | undefined'.
+  Overload 3 of 5, '(payload: string | object | Buffer<ArrayBufferLike>, secretOrPrivateKey: Buffer<ArrayBufferLike> | Secret | PrivateKeyInput | JsonWebKeyInput, callback: SignCallback): void', gave the following error.
+    Object literal may only specify known properties, and 'expiresIn' does not exist in type 'SignCallback'.
+src/application/use-cases/auth/create-token.use-case.ts(81,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/auth/create-token.use-case.ts(82,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/auth/create-token.use-case.ts(102,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/application/use-cases/auth/refresh-token.use-case.ts(10,39): error TS6133: 'TokenExpiredError' is declared but its value is never read.
+src/application/use-cases/auth/refresh-token.use-case.ts(62,15): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/auth/refresh-token.use-case.ts(118,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/auth/refresh-token.use-case.ts(119,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/auth/verify-token.use-case.ts(65,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/auth/verify-token.use-case.ts(66,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/chat/delete-message.use-case.ts(51,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/chat/delete-message.use-case.ts(71,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/chat/delete-message.use-case.ts(106,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/chat/delete-message.use-case.ts(107,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/chat/get-messages.use-case.ts(51,32): error TS2339: Property 'total' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(52,31): error TS2339: Property 'page' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(56,59): error TS2339: Property 'items' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(56,70): error TS7006: Parameter 'message' implicitly has an 'any' type.
+src/application/use-cases/chat/get-messages.use-case.ts(69,32): error TS2339: Property 'total' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(70,31): error TS2339: Property 'page' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(71,32): error TS2339: Property 'limit' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(72,47): error TS2339: Property 'total' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(72,71): error TS2339: Property 'limit' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(73,34): error TS2339: Property 'page' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(73,67): error TS2339: Property 'total' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(73,91): error TS2339: Property 'limit' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(74,38): error TS2339: Property 'page' does not exist on type 'PaginatedResult<Message>'.
+src/application/use-cases/chat/get-messages.use-case.ts(83,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/chat/get-messages.use-case.ts(84,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/chat/mark-messages-read.use-case.ts(75,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/chat/mark-messages-read.use-case.ts(76,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/chat/send-message.use-case.ts(59,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/chat/send-message.use-case.ts(115,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/chat/send-message.use-case.ts(116,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/link/create-link.use-case.ts(70,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/create-link.use-case.ts(154,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/create-link.use-case.ts(155,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/link/get-link.use-case.ts(46,24): error TS2554: Expected 2 arguments, but got 1.
+src/application/use-cases/link/get-link.use-case.ts(83,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/get-link.use-case.ts(84,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/link/list-links.use-case.ts(81,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/list-links.use-case.ts(82,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/link/mark-link-used.use-case.ts(48,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/mark-link-used.use-case.ts(102,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/mark-link-used.use-case.ts(103,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/link/update-link-location.use-case.ts(57,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/update-link-location.use-case.ts(107,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/update-link-location.use-case.ts(108,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/link/verify-link.use-case.ts(48,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/verify-link.use-case.ts(64,13): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/verify-link.use-case.ts(77,13): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/verify-link.use-case.ts(123,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/link/verify-link.use-case.ts(124,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/record/get-recording.use-case.ts(6,22): error TS6133: 'inject' is declared but its value is never read.
+src/application/use-cases/record/get-recording.use-case.ts(10,21): error TS2305: Module '"@shared/constants/index.js"' has no exported member 'RecordingStatus'.
+src/application/use-cases/record/get-recording.use-case.ts(51,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/record/get-recording.use-case.ts(52,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/record/list-recordings.use-case.ts(6,22): error TS6133: 'inject' is declared but its value is never read.
+src/application/use-cases/record/list-recordings.use-case.ts(67,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/record/list-recordings.use-case.ts(68,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/record/start-recording.use-case.ts(12,21): error TS2305: Module '"@shared/constants/index.js"' has no exported member 'RecordingStatus'.
+src/application/use-cases/record/start-recording.use-case.ts(49,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/record/start-recording.use-case.ts(62,9): error TS2322: Type '"H264_720P_30" | "H264_1080P_30" | "H264_720P_60" | "H264_1080P_60" | undefined' is not assignable to type 'EncodingOptionsPreset | undefined'.
+  Type '"H264_720P_30"' is not assignable to type 'EncodingOptionsPreset | undefined'.
+src/application/use-cases/record/start-recording.use-case.ts(98,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/record/start-recording.use-case.ts(99,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/record/stop-recording.use-case.ts(12,21): error TS2305: Module '"@shared/constants/index.js"' has no exported member 'RecordingStatus'.
+src/application/use-cases/record/stop-recording.use-case.ts(49,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/record/stop-recording.use-case.ts(65,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/record/stop-recording.use-case.ts(114,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/record/stop-recording.use-case.ts(115,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/room/close-room.use-case.ts(50,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/close-room.use-case.ts(106,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/close-room.use-case.ts(107,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/room/create-room.use-case.ts(50,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/create-room.use-case.ts(122,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/create-room.use-case.ts(123,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/room/extend-room-expiry.use-case.ts(51,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/extend-room-expiry.use-case.ts(93,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/extend-room-expiry.use-case.ts(94,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/room/get-room.use-case.ts(66,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/get-room.use-case.ts(67,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/room/list-rooms.use-case.ts(43,56): error TS2339: Property 'items' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(43,67): error TS7006: Parameter 'room' implicitly has an 'any' type.
+src/application/use-cases/room/list-rooms.use-case.ts(62,32): error TS2339: Property 'total' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(63,31): error TS2339: Property 'page' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(64,32): error TS2339: Property 'limit' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(65,47): error TS2339: Property 'total' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(65,71): error TS2339: Property 'limit' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(66,34): error TS2339: Property 'page' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(66,67): error TS2339: Property 'total' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(66,91): error TS2339: Property 'limit' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(67,38): error TS2339: Property 'page' does not exist on type 'PaginatedResult<Room>'.
+src/application/use-cases/room/list-rooms.use-case.ts(82,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/list-rooms.use-case.ts(83,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/room/reopen-room.use-case.ts(50,11): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/reopen-room.use-case.ts(111,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/room/reopen-room.use-case.ts(112,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/user/generate-token.use-case.ts(76,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/user/generate-token.use-case.ts(77,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/user/get-user.use-case.ts(70,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/user/get-user.use-case.ts(71,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/user/join-room.use-case.ts(65,13): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/user/join-room.use-case.ts(117,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/user/join-room.use-case.ts(118,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/user/leave-room.use-case.ts(83,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/user/leave-room.use-case.ts(84,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/application/use-cases/user/list-users.use-case.ts(78,9): error TS2511: Cannot create an instance of an abstract class.
+src/application/use-cases/user/list-users.use-case.ts(79,21): error TS2551: Property 'INTERNAL_SERVER_ERROR' does not exist on type 'typeof ErrorCode'. Did you mean 'INTERNAL_ERROR'?
+src/config/env.validation.ts(76,33): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/config/env.validation.ts(76,45): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/container/index.ts(8,1): error TS6133: 'INJECTION_TOKENS' is declared but its value is never read.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(10,3): error TS6133: 'TrackInfo' is declared but its value is never read.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(21,10): error TS2724: '"@shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/infrastructure/adapters/livekit/livekit.adapter.ts(89,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(118,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(139,7): error TS2322: Type 'Result<Room | undefined, AppError>' is not assignable to type 'Result<Room | null, AppError>'.
+  Type 'Success<Room | undefined, AppError>' is not assignable to type 'Result<Room | null, AppError>'.
+    Type 'Success<Room | undefined, AppError>' is not assignable to type 'Success<Room | null, AppError>'.
+      Type 'Room | undefined' is not assignable to type 'Room | null'.
+        Type 'undefined' is not assignable to type 'Room | null'.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(145,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(170,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(193,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(222,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(247,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(264,9): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(roomName: string, output: EncodedOutputs | EncodedFileOutput | StreamOutput | SegmentedFileOutput, opts?: RoomCompositeOptions | undefined): Promise<...>', gave the following error.
+    Argument of type 'RoomCompositeEgressRequest' is not assignable to parameter of type 'EncodedOutputs | EncodedFileOutput | StreamOutput | SegmentedFileOutput'.
+      Type 'RoomCompositeEgressRequest' is missing the following properties from type 'SegmentedFileOutput': protocol, filenamePrefix, playlistName, livePlaylistName, and 3 more.
+  Overload 2 of 2, '(roomName: string, output: EncodedOutputs | EncodedFileOutput | StreamOutput | SegmentedFileOutput, layout?: string | undefined, options?: EncodingOptionsPreset | ... 1 more ... | undefined, audioOnly?: boolean | undefined, videoOnly?: boolean | undefined, customBaseUrl?: string | undefined, audioMixing?: AudioMixing | undefined): Promise<...>', gave the following error.
+    Argument of type 'RoomCompositeEgressRequest' is not assignable to parameter of type 'EncodedOutputs | EncodedFileOutput | StreamOutput | SegmentedFileOutput'.
+      Type 'RoomCompositeEgressRequest' is missing the following properties from type 'SegmentedFileOutput': protocol, filenamePrefix, playlistName, livePlaylistName, and 3 more.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(288,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(313,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(342,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(382,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(407,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/livekit/livekit.adapter.ts(431,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(10,10): error TS2724: '"@shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/infrastructure/adapters/sms/sms.adapter.ts(91,11): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(103,20): error TS18046: 'data' is of type 'unknown'.
+src/infrastructure/adapters/sms/sms.adapter.ts(103,38): error TS18046: 'data' is of type 'unknown'.
+src/infrastructure/adapters/sms/sms.adapter.ts(107,20): error TS18046: 'data' is of type 'unknown'.
+src/infrastructure/adapters/sms/sms.adapter.ts(107,38): error TS18046: 'data' is of type 'unknown'.
+src/infrastructure/adapters/sms/sms.adapter.ts(108,17): error TS18046: 'data' is of type 'unknown'.
+src/infrastructure/adapters/sms/sms.adapter.ts(109,15): error TS18046: 'data' is of type 'unknown'.
+src/infrastructure/adapters/sms/sms.adapter.ts(116,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(137,11): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(146,22): error TS18046: 'data' is of type 'unknown'.
+src/infrastructure/adapters/sms/sms.adapter.ts(152,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(173,11): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(182,22): error TS18046: 'data' is of type 'unknown'.
+src/infrastructure/adapters/sms/sms.adapter.ts(188,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(234,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(246,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/adapters/sms/sms.adapter.ts(333,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/base-repository.ts(12,10): error TS2724: '"@shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/infrastructure/database/mysql/base-repository.ts(67,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/base-repository.ts(97,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/base-repository.ts(127,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/base-repository.ts(157,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/base-repository.ts(184,43): error TS2345: Argument of type 'RowDataPacket | undefined' is not assignable to parameter of type 'RowDataPacket'.
+  Type 'undefined' is not assignable to type 'RowDataPacket'.
+src/infrastructure/database/mysql/base-repository.ts(275,5): error TS2322: Type 'Result<{ items: T[]; total: number; page: number; limit: number; totalPages: number; hasNext: boolean; hasPrevious: boolean; }, AppError>' is not assignable to type 'Result<PaginatedResult<T>, AppError>'.
+  Type 'Success<{ items: T[]; total: number; page: number; limit: number; totalPages: number; hasNext: boolean; hasPrevious: boolean; }, AppError>' is not assignable to type 'Result<PaginatedResult<T>, AppError>'.
+    Type 'Success<{ items: T[]; total: number; page: number; limit: number; totalPages: number; hasNext: boolean; hasPrevious: boolean; }, AppError>' is not assignable to type 'Success<PaginatedResult<T>, AppError>'.
+      Type '{ items: T[]; total: number; page: number; limit: number; totalPages: number; hasNext: boolean; hasPrevious: boolean; }' is missing the following properties from type 'PaginatedResult<T>': data, pagination
+src/infrastructure/database/mysql/connection.ts(7,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/infrastructure/database/mysql/connection.ts(117,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"error"' is not assignable to parameter of type '"enqueue"'.
+src/infrastructure/database/mysql/mysql-connection.ts(8,10): error TS2724: '"@shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/infrastructure/database/mysql/mysql-connection.ts(66,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(81,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(97,11): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(112,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(132,11): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(150,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(190,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(207,11): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(223,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/mysql-connection.ts(254,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-case.repository.ts(42,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-case.repository.ts(106,38): error TS2322: Type 'Case | undefined' is not assignable to type 'Case | null'.
+  Type 'undefined' is not assignable to type 'Case | null'.
+src/infrastructure/database/mysql/repositories/mysql-case.repository.ts(154,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-case.repository.ts(179,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-case.repository.ts(189,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-case.repository.ts(213,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-case.repository.ts(239,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(52,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(99,38): error TS2322: Type 'Link | undefined' is not assignable to type 'Link | null'.
+  Type 'undefined' is not assignable to type 'Link | null'.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(176,9): error TS2416: Property 'exists' in type 'MySqlLinkRepository' is not assignable to the same property in base type 'BaseRepository<Link>'.
+  Type '(linkId: string) => Promise<boolean>' is not assignable to type '(conditions: Record<string, unknown>) => Promise<Result<boolean, AppError>>'.
+    Types of parameters 'linkId' and 'conditions' are incompatible.
+      Type 'Record<string, unknown>' is not assignable to type 'string'.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(177,38): error TS2345: Argument of type '{ linkID: string; }' is not assignable to parameter of type 'string'.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(179,16): error TS2339: Property 'isFailure' does not exist on type 'boolean'.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(180,20): error TS2339: Property 'error' does not exist on type 'boolean'.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(183,19): error TS2551: Property 'value' does not exist on type 'boolean'. Did you mean 'valueOf'?
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(203,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(228,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(238,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(262,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(313,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-link.repository.ts(339,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-message.repository.ts(41,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-message.repository.ts(109,30): error TS2554: Expected 1 arguments, but got 2.
+src/infrastructure/database/mysql/repositories/mysql-message.repository.ts(163,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-message.repository.ts(188,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-message.repository.ts(198,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-message.repository.ts(222,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-message.repository.ts(262,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(49,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(89,38): error TS2322: Type 'Room | undefined' is not assignable to type 'Room | null'.
+  Type 'undefined' is not assignable to type 'Room | null'.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(153,9): error TS2416: Property 'exists' in type 'MySqlRoomRepository' is not assignable to the same property in base type 'BaseRepository<Room>'.
+  Type '(name: string) => Promise<boolean>' is not assignable to type '(conditions: Record<string, unknown>) => Promise<Result<boolean, AppError>>'.
+    Types of parameters 'name' and 'conditions' are incompatible.
+      Type 'Record<string, unknown>' is not assignable to type 'string'.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(154,38): error TS2345: Argument of type '{ room: string; }' is not assignable to parameter of type 'string'.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(156,16): error TS2339: Property 'isFailure' does not exist on type 'boolean'.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(157,20): error TS2339: Property 'error' does not exist on type 'boolean'.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(160,19): error TS2551: Property 'value' does not exist on type 'boolean'. Did you mean 'valueOf'?
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(182,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(207,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(217,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(241,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(267,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(293,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-room.repository.ts(319,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-service.repository.ts(39,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-service.repository.ts(88,38): error TS2322: Type 'Service | undefined' is not assignable to type 'Service | null'.
+  Type 'undefined' is not assignable to type 'Service | null'.
+src/infrastructure/database/mysql/repositories/mysql-service.repository.ts(148,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-service.repository.ts(173,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-service.repository.ts(183,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-service.repository.ts(207,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-service.repository.ts(233,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-service.repository.ts(259,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(51,9): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(111,38): error TS2322: Type 'User | undefined' is not assignable to type 'User | null'.
+  Type 'undefined' is not assignable to type 'User | null'.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(137,38): error TS2322: Type 'User | undefined' is not assignable to type 'User | null'.
+  Type 'undefined' is not assignable to type 'User | null'.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(169,9): error TS2416: Property 'exists' in type 'MySqlUserRepository' is not assignable to the same property in base type 'BaseRepository<User>'.
+  Type '(room: string, identity: string) => Promise<boolean>' is not assignable to type '(conditions: Record<string, unknown>) => Promise<Result<boolean, AppError>>'.
+    Target signature provides too few arguments. Expected 2 or more, but got 1.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(170,31): error TS2554: Expected 2 arguments, but got 1.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(172,16): error TS2339: Property 'isFailure' does not exist on type 'boolean'.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(173,20): error TS2339: Property 'error' does not exist on type 'boolean'.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(176,19): error TS2551: Property 'value' does not exist on type 'boolean'. Did you mean 'valueOf'?
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(198,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(223,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(233,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(257,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(297,13): error TS2511: Cannot create an instance of an abstract class.
+src/infrastructure/database/mysql/repositories/mysql-user.repository.ts(323,13): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/app.ts(12,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/http/controllers/base.controller.ts(39,9): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/controllers/chat.controller.ts(47,27): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/chat.controller.ts(53,30): error TS2551: Property 'getMessage' does not exist on type 'ChatService'. Did you mean 'getMessages'?
+src/presentation/http/controllers/chat.controller.ts(63,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/chat.controller.ts(81,27): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/chat.controller.ts(104,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/record.controller.ts(49,7): error TS2353: Object literal may only specify known properties, and 'roomName' does not exist in type '{ room: string; egressId: string; }'.
+src/presentation/http/controllers/record.controller.ts(65,7): error TS2353: Object literal may only specify known properties, and 'recordingId' does not exist in type '{ egressId: string; }'.
+src/presentation/http/controllers/record.controller.ts(81,7): error TS2353: Object literal may only specify known properties, and 'roomName' does not exist in type '{ room: string; page: number; limit: number; }'.
+src/presentation/http/controllers/room.controller.ts(49,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/room.controller.ts(86,30): error TS2339: Property 'updateRoom' does not exist on type 'RoomService'.
+src/presentation/http/controllers/room.controller.ts(96,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/room.controller.ts(112,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/room.controller.ts(129,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/room.controller.ts(146,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/user.controller.ts(76,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/user.controller.ts(93,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/user.controller.ts(112,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/controllers/user.controller.ts(113,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/http/middlewares/auth.middleware.ts(9,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/http/middlewares/auth.middleware.ts(39,3): error TS6133: 'res' is declared but its value is never read.
+src/presentation/http/middlewares/auth.middleware.ts(47,13): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/middlewares/auth.middleware.ts(60,13): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/middlewares/auth.middleware.ts(83,9): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/middlewares/auth.middleware.ts(91,9): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/middlewares/auth.middleware.ts(108,3): error TS6133: 'res' is declared but its value is never read.
+src/presentation/http/middlewares/auth.middleware.ts(151,25): error TS6133: 'res' is declared but its value is never read.
+src/presentation/http/middlewares/auth.middleware.ts(154,9): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/middlewares/auth.middleware.ts(165,9): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/middlewares/error-handler.middleware.ts(9,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/http/middlewares/request-logger.middleware.ts(7,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/http/middlewares/validation.middleware.ts(20,31): error TS6133: 'res' is declared but its value is never read.
+src/presentation/http/middlewares/validation.middleware.ts(29,9): error TS2322: Type 'unknown' is not assignable to type 'ParsedQs'.
+src/presentation/http/middlewares/validation.middleware.ts(34,9): error TS2322: Type 'unknown' is not assignable to type 'ParamsDictionary'.
+src/presentation/http/middlewares/validation.middleware.ts(40,33): error TS2511: Cannot create an instance of an abstract class.
+src/presentation/http/middlewares/validation.middleware.ts(44,17): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/presentation/http/middlewares/validation.middleware.ts(44,29): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/presentation/http/routes/chat.routes.ts(9,40): error TS6133: 'validateQuery' is declared but its value is never read.
+src/presentation/http/routes/chat.routes.ts(12,3): error TS6133: 'GetMessagesDtoSchema' is declared but its value is never read.
+src/presentation/http/routes/record.routes.ts(9,10): error TS6133: 'validateBody' is declared but its value is never read.
+src/presentation/http/routes/record.routes.ts(9,40): error TS6133: 'validateQuery' is declared but its value is never read.
+src/presentation/http/routes/record.routes.ts(10,1): error TS6192: All imports in import declaration are unused.
+src/presentation/http/routes/user.routes.ts(9,40): error TS6133: 'validateQuery' is declared but its value is never read.
+src/presentation/http/routes/user.routes.ts(14,3): error TS6133: 'ListUsersDtoSchema' is declared but its value is never read.
+src/presentation/server.ts(6,10): error TS2440: Import declaration conflicts with local declaration of 'createServer'.
+src/presentation/server.ts(9,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/server.ts(20,36): error TS2345: Argument of type 'Express' is not assignable to parameter of type 'number'.
+src/presentation/server.ts(21,44): error TS2345: Argument of type 'Server' is not assignable to parameter of type 'Server<typeof IncomingMessage, typeof ServerResponse>'.
+  Type 'Server' is missing the following properties from type 'Server<typeof IncomingMessage, typeof ServerResponse>': setTimeout, maxHeadersCount, maxRequestsPerSocket, timeout, and 31 more.
+src/presentation/server.ts(29,23): error TS2339: Property 'listen' does not exist on type 'Server'.
+src/presentation/server.ts(50,23): error TS2339: Property 'close' does not exist on type 'Server'.
+src/presentation/server.ts(50,30): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/presentation/websocket/namespaces/base.namespace.ts(13,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/websocket/namespaces/mobile.namespace.ts(7,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/websocket/namespaces/queue.namespace.ts(7,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/websocket/namespaces/room.namespace.ts(11,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?
+src/presentation/websocket/namespaces/room.namespace.ts(15,11): error TS6133: 'userService' is declared but its value is never read.
+src/presentation/websocket/namespaces/room.namespace.ts(52,47): error TS6133: 'reason' is declared but its value is never read.
+src/presentation/websocket/namespaces/room.namespace.ts(78,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/presentation/websocket/namespaces/room.namespace.ts(233,20): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.
+src/presentation/websocket/socket.server.ts(15,10): error TS2724: '"@/shared/utils/logger.util.js"' has no exported member named 'logger'. Did you mean 'Logger'?

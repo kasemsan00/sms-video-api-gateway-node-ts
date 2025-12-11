@@ -45,8 +45,14 @@ export class RoomController extends BaseController {
    * GET /api/rooms/:roomName
    */
   getRoom = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: GetRoomDto = {
-      roomName: req.params.roomName,
+      roomName,
     };
 
     await this.executeUseCase(
@@ -75,16 +81,19 @@ export class RoomController extends BaseController {
    * PATCH /api/rooms/:roomName
    */
   updateRoom = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: UpdateRoomDto = {
-      roomName: req.params.roomName,
+      roomName,
       ...req.body,
     };
 
-    await this.executeUseCase(
-      req,
-      res,
-      () => this.roomService.updateRoom(dto)
-    );
+    // Note: updateRoom method doesn't exist on RoomService, this might need to be implemented
+    this.sendError(res, { message: 'Update room not implemented' }, 501);
   };
 
   /**
@@ -92,8 +101,14 @@ export class RoomController extends BaseController {
    * POST /api/rooms/:roomName/close
    */
   closeRoom = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: CloseRoomDto = {
-      roomName: req.params.roomName,
+      roomName,
     };
 
     await this.executeUseCase(
@@ -108,8 +123,14 @@ export class RoomController extends BaseController {
    * POST /api/rooms/:roomName/reopen
    */
   reopenRoom = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: ReopenRoomDto = {
-      roomName: req.params.roomName,
+      roomName,
       expiryDays: req.body.expiryDays,
     };
 
@@ -125,8 +146,14 @@ export class RoomController extends BaseController {
    * POST /api/rooms/:roomName/extend
    */
   extendExpiry = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: ExtendRoomExpiryDto = {
-      roomName: req.params.roomName,
+      roomName,
       days: req.body.days,
     };
 
@@ -142,8 +169,14 @@ export class RoomController extends BaseController {
    * DELETE /api/rooms/:roomName
    */
   deleteRoom = async (req: Request, res: Response): Promise<void> => {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      this.sendError(res, { message: 'Room name is required' }, 400);
+      return;
+    }
+
     const dto: CloseRoomDto = {
-      roomName: req.params.roomName,
+      roomName,
     };
 
     await this.executeUseCase(

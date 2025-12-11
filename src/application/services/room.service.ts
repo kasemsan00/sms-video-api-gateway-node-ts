@@ -50,7 +50,7 @@ export class RoomService {
   /**
    * Close a room
    */
-  async closeRoom(dto: CloseRoomDto): Promise<Result<void, AppError>> {
+  async closeRoom(dto: CloseRoomDto): Promise<Result<RoomResponseDto, AppError>> {
     return this.closeRoomUseCase.execute(dto);
   }
 

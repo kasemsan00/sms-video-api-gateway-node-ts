@@ -62,6 +62,8 @@ export type UpdateLinkLocationDto = z.infer<typeof UpdateLinkLocationDtoSchema>;
 export const ListLinksDtoSchema = z.object({
   room: z.string().min(1),
   linkType: z.nativeEnum(LinkType).optional(),
+  page: z.number().int().positive().optional(),
+  limit: z.number().int().positive().optional(),
 });
 
 export type ListLinksDto = z.infer<typeof ListLinksDtoSchema>;

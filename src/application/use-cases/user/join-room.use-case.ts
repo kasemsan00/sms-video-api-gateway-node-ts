@@ -8,7 +8,7 @@ import { JoinRoomDto, UserResponseDto } from '@application/dtos/index.js';
 import { IUserRepository } from '@domain/repositories/user.repository.interface.js';
 import { User } from '@domain/entities/user.entity.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
+import { AppError, ValidationError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -62,10 +62,8 @@ export class JoinRoomUseCase {
             error: userResult.error,
           });
           return failure(
-            new AppError(
-              ErrorCode.VALIDATION_ERROR,
+            new ValidationError(
               userResult.error.message,
-              400,
               { details: userResult.error }
             )
           );
@@ -114,10 +112,8 @@ export class JoinRoomUseCase {
       logger.error('Error joining room', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to join room: ${message}`,
-          500,
           { originalError: message }
         )
       );

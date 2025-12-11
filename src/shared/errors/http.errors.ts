@@ -144,7 +144,12 @@ export class ExternalServiceError extends AppError {
   readonly statusCode = 500;
 
   constructor(service: string, message: string, details?: unknown) {
-    super(`${service} error: ${message}`, { service, ...details });
+    super(
+      `${service} error: ${message}`,
+      details && typeof details === 'object'
+        ? { service, ...details }
+        : { service, details }
+    );
   }
 }
 

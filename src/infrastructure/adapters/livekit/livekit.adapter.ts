@@ -7,18 +7,17 @@ import {
   AccessToken,
   RoomServiceClient,
   Room as LiveKitRoom,
-  TrackInfo,
   ParticipantInfo,
   EgressClient,
-  RoomCompositeEgressRequest,
   EncodingOptionsPreset,
+  EncodedFileOutput,
 } from 'livekit-server-sdk';
 import { injectable } from 'tsyringe';
 import { getLivekitConfig, DEFAULT_TOKEN_GRANTS } from '@config/livekit.config.js';
 import { Result, success, failure } from '@shared/types/result.type.js';
-import { AppError } from '@shared/errors/base.error.js';
+import { AppError, ExternalServiceError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/error-codes.constant.js';
-import { logger } from '@shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export interface TokenOptions {
   roomName: string;
@@ -86,10 +85,9 @@ export class LiveKitAdapter {
       logger.error('Failed to generate LiveKit token', { error: message, options });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
+        new ExternalServiceError(
+          'LiveKit',
           `Failed to generate LiveKit token: ${message}`,
-          500,
           { originalError: message }
         )
       );
@@ -115,10 +113,9 @@ export class LiveKitAdapter {
       logger.error('Failed to create LiveKit room', { error: message, options });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
+        new ExternalServiceError(
+          'LiveKit',
           `Failed to create LiveKit room: ${message}`,
-          500,
           { originalError: message }
         )
       );
@@ -136,7 +133,7 @@ export class LiveKitAdapter {
         return success(null);
       }
 
-      return success(rooms[0]);
+      return success(rooms[0] ?? null);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       logger.error('Failed to get LiveKit room', { error: message, roomName });
@@ -259,18 +256,16 @@ export class LiveKitAdapter {
    */
   async startRecording(options: RecordingOptions): Promise<Result<string, AppError>> {
     try {
+      const fileOutput: EncodedFileOutput = {
+        fileType: 1, // MP4
+        filepath: options.fileOutputPrefix || `recordings/${options.roomName}`,
+      };
+
       const egressInfo = await this.egressService.startRoomCompositeEgress(
         options.roomName,
+        fileOutput,
         {
-          fileOutputs: [
-            {
-              fileType: 1, // MP4
-              filepath: options.fileOutputPrefix || `recordings/${options.roomName}`,
-            },
-          ],
-        } as RoomCompositeEgressRequest,
-        {
-          preset: options.preset || EncodingOptionsPreset.H264_720P_30,
+          encodingOptions: options.preset || EncodingOptionsPreset.H264_720P_30,
         }
       );
 
@@ -285,10 +280,9 @@ export class LiveKitAdapter {
       logger.error('Failed to start recording', { error: message, options });
 
       return failure(
-        new AppError(
-          ErrorCode.EXTERNAL_SERVICE_ERROR,
+        new ExternalServiceError(
+          'LiveKit',
           `Failed to start recording: ${message}`,
-          500,
           { originalError: message }
         )
       );

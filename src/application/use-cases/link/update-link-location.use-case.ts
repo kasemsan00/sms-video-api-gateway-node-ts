@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { UpdateLinkLocationDto, LinkResponseDto } from '@application/dtos/index.js';
 import { ILinkRepository } from '@domain/repositories/link.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, LinkNotFoundError } from '@shared/errors/index.js';
+import { AppError, LinkNotFoundError, BusinessRuleViolationError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -54,10 +54,8 @@ export class UpdateLinkLocationUseCase {
           error: updateResult.error,
         });
         return failure(
-          new AppError(
-            ErrorCode.BUSINESS_RULE_VIOLATION,
+          new BusinessRuleViolationError(
             updateResult.error.message,
-            400,
             { details: updateResult.error }
           )
         );
@@ -104,10 +102,8 @@ export class UpdateLinkLocationUseCase {
       logger.error('Error updating link location', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to update link location: ${message}`,
-          500,
           { originalError: message }
         )
       );

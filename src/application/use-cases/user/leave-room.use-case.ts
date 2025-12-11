@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { LeaveRoomDto, UserResponseDto } from '@application/dtos/index.js';
 import { IUserRepository } from '@domain/repositories/user.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, UserNotFoundError } from '@shared/errors/index.js';
+import { AppError, UserNotFoundError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -80,10 +80,8 @@ export class LeaveRoomUseCase {
       logger.error('Error leaving room', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to leave room: ${message}`,
-          500,
           { originalError: message }
         )
       );

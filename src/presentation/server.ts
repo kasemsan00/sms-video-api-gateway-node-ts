@@ -6,7 +6,7 @@
 import { createServer } from 'http';
 import { createExpressApp } from './http/app.js';
 import { createSocketServer } from './websocket/socket.server.js';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export class Server {
   private httpServer: ReturnType<typeof createServer>;

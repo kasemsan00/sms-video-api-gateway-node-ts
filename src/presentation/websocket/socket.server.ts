@@ -12,7 +12,7 @@ import {
   SocketData,
 } from './socket.types.js';
 import { RoomNamespace, QueueNamespace, MobileNamespace } from './namespaces/index.js';
-import { logger } from '@/shared/utils/logger.util.js';
+import { log as logger } from '@shared/utils/index.js';
 
 export class SocketServer {
   private io: SocketIOServer<

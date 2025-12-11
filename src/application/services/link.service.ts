@@ -3,7 +3,7 @@
  * Orchestrates link-related use cases
  */
 
-import { injectable } from 'tsyringe';
+import { injectable } from "tsyringe";
 import {
   CreateLinkUseCase,
   GetLinkUseCase,
@@ -11,7 +11,7 @@ import {
   MarkLinkUsedUseCase,
   UpdateLinkLocationUseCase,
   ListLinksUseCase,
-} from '../use-cases/link/index.js';
+} from "../use-cases/link/index.js";
 import {
   CreateLinkDto,
   GetLinkDto,
@@ -21,9 +21,9 @@ import {
   ListLinksDto,
   CreateLinkResponseDto,
   LinkResponseDto,
-} from '../dtos/index.js';
-import { Result } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
+} from "../dtos/index.js";
+import { Result } from "@shared/types/index.js";
+import { AppError } from "@shared/errors/index.js";
 
 /**
  * Link Service
@@ -37,7 +37,7 @@ export class LinkService {
     private verifyLinkUseCase: VerifyLinkUseCase,
     private markLinkUsedUseCase: MarkLinkUsedUseCase,
     private updateLinkLocationUseCase: UpdateLinkLocationUseCase,
-    private listLinksUseCase: ListLinksUseCase
+    private listLinksUseCase: ListLinksUseCase,
   ) {}
 
   /**
@@ -64,7 +64,7 @@ export class LinkService {
   /**
    * Mark link as used
    */
-  async markLinkUsed(dto: MarkLinkUsedDto): Promise<Result<void, AppError>> {
+  async markLinkUsed(dto: MarkLinkUsedDto): Promise<Result<LinkResponseDto, AppError>> {
     return this.markLinkUsedUseCase.execute(dto);
   }
 

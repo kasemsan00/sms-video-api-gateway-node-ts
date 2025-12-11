@@ -3,25 +3,11 @@
  * Orchestrates user-related use cases
  */
 
-import { injectable } from 'tsyringe';
-import {
-  GenerateTokenUseCase,
-  JoinRoomUseCase,
-  LeaveRoomUseCase,
-  GetUserUseCase,
-  ListUsersUseCase,
-} from '../use-cases/user/index.js';
-import {
-  GenerateTokenDto,
-  JoinRoomDto,
-  LeaveRoomDto,
-  GetUserDto,
-  ListUsersDto,
-  GenerateTokenResponseDto,
-  UserResponseDto,
-} from '../dtos/index.js';
-import { Result } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
+import { injectable } from "tsyringe";
+import { GenerateTokenUseCase, JoinRoomUseCase, LeaveRoomUseCase, GetUserUseCase, ListUsersUseCase } from "../use-cases/user/index.js";
+import { GenerateTokenDto, JoinRoomDto, LeaveRoomDto, GetUserDto, ListUsersDto, GenerateTokenResponseDto, UserResponseDto } from "../dtos/index.js";
+import { Result } from "@shared/types/index.js";
+import { AppError } from "@shared/errors/index.js";
 
 /**
  * User Service
@@ -34,7 +20,7 @@ export class UserService {
     private joinRoomUseCase: JoinRoomUseCase,
     private leaveRoomUseCase: LeaveRoomUseCase,
     private getUserUseCase: GetUserUseCase,
-    private listUsersUseCase: ListUsersUseCase
+    private listUsersUseCase: ListUsersUseCase,
   ) {}
 
   /**
@@ -54,7 +40,7 @@ export class UserService {
   /**
    * Leave a room
    */
-  async leaveRoom(dto: LeaveRoomDto): Promise<Result<void, AppError>> {
+  async leaveRoom(dto: LeaveRoomDto): Promise<Result<UserResponseDto, AppError>> {
     return this.leaveRoomUseCase.execute(dto);
   }
 

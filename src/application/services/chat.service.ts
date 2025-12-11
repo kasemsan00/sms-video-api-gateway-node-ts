@@ -17,6 +17,7 @@ import {
   MarkMessagesReadDto,
   MessageResponseDto,
   GetMessagesResponseDto,
+  RoomResponseDto,
 } from '../dtos/index.js';
 import { Result } from '@shared/types/index.js';
 import { AppError } from '@shared/errors/index.js';
@@ -51,14 +52,14 @@ export class ChatService {
   /**
    * Delete a message
    */
-  async deleteMessage(dto: DeleteMessageDto): Promise<Result<void, AppError>> {
+  async deleteMessage(dto: DeleteMessageDto): Promise<Result<MessageResponseDto, AppError>> {
     return this.deleteMessageUseCase.execute(dto);
   }
 
   /**
    * Mark messages as read
    */
-  async markMessagesRead(dto: MarkMessagesReadDto): Promise<Result<void, AppError>> {
+  async markMessagesRead(dto: MarkMessagesReadDto): Promise<Result<RoomResponseDto, AppError>> {
     return this.markMessagesReadUseCase.execute(dto);
   }
 }

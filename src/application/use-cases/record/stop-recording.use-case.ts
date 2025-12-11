@@ -8,8 +8,9 @@ import { StopRecordingDto, RecordingResponseDto } from '@application/dtos/index.
 import { IRoomRepository } from '@domain/repositories/room.repository.interface.js';
 import { LiveKitAdapter } from '@infrastructure/adapters/livekit/livekit.adapter.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError, RoomNotFoundError } from '@shared/errors/index.js';
-import { ErrorCode, RecordingStatus } from '@shared/constants/index.js';
+import { AppError, RoomNotFoundError, BusinessRuleViolationError, InvalidInputError, InternalServerError } from '@shared/errors/index.js';
+import { ErrorCode } from '@shared/constants/index.js';
+import { RecordingStatus } from '@application/dtos/index.js';
 import { logger } from '@shared/utils/index.js';
 
 /**
@@ -46,11 +47,7 @@ export class StopRecordingUseCase {
       if (!room.recordId) {
         logger.warn('Room is not being recorded', { room: dto.room });
         return failure(
-          new AppError(
-            ErrorCode.BUSINESS_RULE_VIOLATION,
-            'Room is not being recorded',
-            400
-          )
+          new BusinessRuleViolationError('Room is not being recorded')
         );
       }
 
@@ -62,15 +59,7 @@ export class StopRecordingUseCase {
           roomRecordId: room.recordId,
         });
         return failure(
-          new AppError(
-            ErrorCode.INVALID_INPUT,
-            'EgressId does not match room recording',
-            400,
-            {
-              providedEgressId: dto.egressId,
-              roomRecordId: room.recordId,
-            }
-          )
+          new InvalidInputError('egressId', 'EgressId does not match room recording')
         );
       }
 
@@ -111,10 +100,8 @@ export class StopRecordingUseCase {
       logger.error('Error stopping recording', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to stop recording: ${message}`,
-          500,
           { originalError: message }
         )
       );

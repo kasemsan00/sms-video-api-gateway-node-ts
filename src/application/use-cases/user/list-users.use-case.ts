@@ -7,7 +7,7 @@ import { injectable, inject } from 'tsyringe';
 import { ListUsersDto, UserResponseDto } from '@application/dtos/index.js';
 import { IUserRepository } from '@domain/repositories/user.repository.interface.js';
 import { Result, success, failure } from '@shared/types/index.js';
-import { AppError } from '@shared/errors/index.js';
+import { AppError, InternalServerError } from '@shared/errors/index.js';
 import { ErrorCode } from '@shared/constants/index.js';
 import { logger } from '@shared/utils/index.js';
 
@@ -75,10 +75,8 @@ export class ListUsersUseCase {
       logger.error('Error listing users', { error: message, dto });
 
       return failure(
-        new AppError(
-          ErrorCode.INTERNAL_SERVER_ERROR,
+        new InternalServerError(
           `Failed to list users: ${message}`,
-          500,
           { originalError: message }
         )
       );
